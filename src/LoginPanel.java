@@ -16,7 +16,7 @@ public class LoginPanel implements ActionListener {
         frame.setTitle("Hoş Geldiniz!");
         frame.setSize(500,400);
         frame.setLocationRelativeTo(null);
-//        frame.setLayout(new GridLayout(4,3,10,10));
+
 
         frame.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -30,7 +30,6 @@ public class LoginPanel implements ActionListener {
         personelButon = new JButton();
 
         hastaButon.setText("Hasta Giriş");
-//        hastaButon.setBounds(170,115,150,50);
         hastaButon.setFocusable(false);
         hastaButon.addActionListener(this);
 
@@ -48,7 +47,6 @@ public class LoginPanel implements ActionListener {
         frame.add(hastaButon, gbc);
 
         personelButon.setText("Personel Giriş");
-//        personelButon.setBounds(170,175,150,50);
         personelButon.setFocusable(false);
         personelButon.addActionListener(this);
 
@@ -60,38 +58,18 @@ public class LoginPanel implements ActionListener {
         frame.add(new JPanel(), gbc);
 
 
-//        //1.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//
-//        //2.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(hastaButon);
-//        frame.add(new JPanel()); //boş panel
-//
-//        //3.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(personelButon);
-//        frame.add(new JPanel()); //boş panel
-//
-//        //4.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == hastaButon){
             frame.dispose();
-            HastaPanel hastaPanel = new HastaPanel();
+            new HastaPanel();
         }
 
         if(e.getSource() == personelButon){
             frame.dispose();
-            PersonelPanel personelPanel = new PersonelPanel();
+            new PersonelPanel();
         }
     }
 }

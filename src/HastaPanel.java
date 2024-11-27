@@ -1,9 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class HastaPanel {
+public class HastaPanel implements ActionListener {
 
     JFrame frame;
+    JButton goBackButton;
 
     HastaPanel () {
         frame = new JFrame();
@@ -12,7 +15,7 @@ public class HastaPanel {
         frame.setTitle("Hasta Giriş");
         frame.setSize(500,400);
         frame.setLocationRelativeTo(null);
-//        frame.setLayout(new GridLayout(6,5,5,10));
+
         frame.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -33,14 +36,14 @@ public class HastaPanel {
 
         JLabel nameLabel = new JLabel();
         nameLabel.setText("Ad Soyad:");
-//        nameLabel.setBounds(140,100,55,40);
+
 
         gbc.gridx = 1;
         gbc.gridy = 1;
         frame.add(nameLabel, gbc);
 
         JTextField nameTextField = new JTextField();
-//        nameTextField.setBounds(200,110,150,25);
+
 
         gbc.gridx = 2;
         gbc.gridwidth = 2; //2 genişlikte
@@ -48,7 +51,7 @@ public class HastaPanel {
 
         JLabel idLabel = new JLabel();
         idLabel.setText("TC Kimlik No:");
-//        idLabel.setBounds(120,150,77,40);
+
 
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -56,7 +59,7 @@ public class HastaPanel {
         frame.add(idLabel, gbc);
 
         JTextField idTextField = new JTextField();
-//        idTextField.setBounds(200,160,150,25);
+
 
         gbc.gridx = 2;
         gbc.gridwidth = 2;
@@ -64,7 +67,7 @@ public class HastaPanel {
 
         JLabel passwordLabel = new JLabel();
         passwordLabel.setText("Şifre :");
-//        passwordLabel.setBounds(162,200,35,40);
+
 
         gbc.gridx = 1;
         gbc.gridy = 3;
@@ -72,7 +75,7 @@ public class HastaPanel {
         frame.add(passwordLabel, gbc);
 
         JTextField passwordTextField = new JTextField();
-//        passwordTextField.setBounds(200,210,150,25);
+
 
         gbc.gridx = 2;
         gbc.gridy = 3;
@@ -82,7 +85,7 @@ public class HastaPanel {
         JButton loginButton = new JButton();
         loginButton.setText("Giriş Yap");
         loginButton.setFocusable(false);
-//        loginButton.setBounds(225,240,75,50);
+
 
         gbc.gridx = 3;
         gbc.gridy = 4;
@@ -98,9 +101,10 @@ public class HastaPanel {
         gbc.gridwidth = 1;
         frame.add(registerButton, gbc);
 
-        JButton goBackButton = new JButton();
+        goBackButton = new JButton();
         goBackButton.setText("Geri Dön");
         goBackButton.setFocusable(false);
+        goBackButton.addActionListener(this);
 
         gbc.gridx = 1;
         gbc.gridy = 4;
@@ -113,47 +117,13 @@ public class HastaPanel {
         gbc.gridwidth = 1;
         frame.add(new JPanel(), gbc);
 
-//        //1.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//
-//        //2.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(nameLabel);
-//        frame.add(nameTextField);
-//        frame.add(new JPanel()); //boş panel
-//
-//        //3.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(idLabel);
-//        frame.add(idTextField);
-//        frame.add(new JPanel()); //boş panel
-//
-//        //4.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(passwordLabel);
-//        frame.add(passwordTextField);
-//        frame.add(new JPanel()); //boş panel
-//
-//        //5.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(goBackButton);
-//        frame.add(registerButton);
-//        frame.add(loginButton);
-//        frame.add(new JPanel()); //boş panel
-//
-//        //6.satır
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
-//        frame.add(new JPanel()); //boş panel
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == goBackButton){
+            frame.dispose();
+            new LoginPanel();
+        }
     }
 }
