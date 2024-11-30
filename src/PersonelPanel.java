@@ -9,6 +9,7 @@ public class PersonelPanel {
     JButton doctorButon;
     JButton labButon;
     JButton adminButon;
+    JButton goBackLoginButton;
     MainPanel mainPanel;
 
     PersonelPanel () {
@@ -172,9 +173,25 @@ public class PersonelPanel {
             gbc.gridwidth = 1;
             this.add(adminButon, gbc);
 
+            //Boş Alan
+            gbc.gridx = 1;
+            gbc.gridy = 4;
+            gbc.gridwidth = 1;
+            this.add(new JPanel(), gbc);
+
+            goBackLoginButton = new JButton();
+            goBackLoginButton.setText("Geri Dön");
+            goBackLoginButton.setFocusable(false);
+            goBackLoginButton.addActionListener(this);
+
+            gbc.gridx = 1;
+            gbc.gridy = 5;
+            gbc.gridwidth = 1;
+            this.add(goBackLoginButton, gbc);
+
             //Alt Boşluk
             gbc.gridx = 0;
-            gbc.gridy = 4;
+            gbc.gridy = 6;
             gbc.gridwidth = 1;
             this.add(new JPanel(), gbc);
         }
@@ -212,6 +229,11 @@ public class PersonelPanel {
 
                 frame.revalidate();
                 frame.repaint();
+            }
+
+            if (e.getSource() == goBackLoginButton){
+                frame.dispose();
+                new LoginPanel();
             }
         }
     }
