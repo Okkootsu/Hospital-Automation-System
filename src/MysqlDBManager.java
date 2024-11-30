@@ -31,8 +31,8 @@ public class MysqlDBManager {
 
             Statement statement = connection.createStatement();
 
-            String query = "INSERT INTO '"+table+"'(fullName, tc, password)" +
-                    "VALUES('"+user.username+"', '"+user.tc+"' , '"+user.password+"')";
+            String query = "INSERT INTO "+table+"(fullName, tc, password)" +
+                    "VALUES('"+user.username+"', "+user.tc+" , '"+user.password+"')";
 
             statement.execute(query);
 
