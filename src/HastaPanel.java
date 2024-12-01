@@ -26,11 +26,14 @@ public class HastaPanel {
     }
 
 
-    public class MainPanel extends JPanel implements ActionListener{
+    private class MainPanel extends JPanel implements ActionListener{
 
         JButton registerButton;
         JButton loginButton;
         JButton goBackLoginButton;
+        JTextField nameTextField;
+        JTextField tcTextField;
+        JTextField passwordTextField;
 
         MainPanel(){
             this.setLayout(new GridBagLayout());
@@ -59,7 +62,7 @@ public class HastaPanel {
             gbc.gridy = 1;
             this.add(nameLabel, gbc);
 
-            JTextField nameTextField = new JTextField();
+            nameTextField = new JTextField();
 
 
             gbc.gridx = 2;
@@ -74,7 +77,7 @@ public class HastaPanel {
             gbc.gridwidth = 1;
             this.add(tcLabel, gbc);
 
-            JTextField tcTextField = new JTextField();
+            tcTextField = new JTextField();
 
             gbc.gridx = 2;
             gbc.gridy = 2;
@@ -90,7 +93,7 @@ public class HastaPanel {
             gbc.gridwidth = 1;
             this.add(passwordLabel, gbc);
 
-            JTextField passwordTextField = new JTextField();
+            passwordTextField = new JTextField();
 
 
             gbc.gridx = 2;
@@ -155,14 +158,49 @@ public class HastaPanel {
             }
 
             if(e.getSource() == loginButton){
-                System.out.println("Butona basıldı");
+                BaseUser customer = new Customer();
+                MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+                try{
+                    customer.username = nameTextField.getText();
+                    customer.password = passwordTextField.getText();
+                    customer.tc = Long.parseLong(tcTextField.getText());
+
+                    ResultSet resultSet = mysqlDBManager.getInfo(customer.getTable(), customer);
+
+                    if(resultSet.next()){
+                        if(resultSet.getLong("tc") == customer.tc){
+                            if(resultSet.getString("fullName").equals(customer.username)){
+                                if(resultSet.getString("password").equals(customer.password)){
+                                    frame.dispose();
+                                    new Login(customer);
+                                }else{
+                                    JOptionPane.showMessageDialog(null,"Girilen bilgiler hatalı",
+                                            "Uyarı",JOptionPane.INFORMATION_MESSAGE);
+                                }
+                            }else {
+                                JOptionPane.showMessageDialog(null,"Girilen bilgiler hatalı",
+                                        "Uyarı",JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }else {
+                            JOptionPane.showMessageDialog(null,"Kullanıcı sisteme kayıtlı değil",
+                                    "Uyarı",JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }else {
+                        JOptionPane.showMessageDialog(null,"Kullanıcı sisteme kayıtlı değil",
+                                "Uyarı",JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }catch (Exception exception){
+                    JOptionPane.showMessageDialog(null,"Hata Kodu:"+exception.getMessage(),
+                            "Bir Hata Oluştu (loginButton)",JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }
 
 
 
-    public class RegisterPanel extends JPanel implements ActionListener{
+    private class RegisterPanel extends JPanel implements ActionListener{
 
         JTextField nameTextField;
         JTextField tcTextField;

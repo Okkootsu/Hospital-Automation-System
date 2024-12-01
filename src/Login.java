@@ -8,7 +8,7 @@ public class Login implements ILoginDal{
                     "Uyarı",JOptionPane.INFORMATION_MESSAGE);
         }
         else {
-
+            new MainMenuPanel(user);
         }
     }
 
