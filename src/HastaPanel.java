@@ -2,15 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 
 public class HastaPanel {
 
     JFrame frame;
-    JButton goBackLoginButton;
-    JButton registerButton;
     MainPanel mainPanel;
     RegisterPanel registerPanel;
-    JButton goBackButton;
+
 
     HastaPanel () {
         frame = new JFrame();
@@ -28,6 +27,11 @@ public class HastaPanel {
 
 
     public class MainPanel extends JPanel implements ActionListener{
+
+        JButton registerButton;
+        JButton loginButton;
+        JButton goBackLoginButton;
+
         MainPanel(){
             this.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
@@ -62,13 +66,27 @@ public class HastaPanel {
             gbc.gridwidth = 2; //2 genişlikte
             this.add(nameTextField, gbc);
 
+            JLabel tcLabel = new JLabel();
+            tcLabel.setText("TC Kimlik No:");
+
+            gbc.gridx = 1;
+            gbc.gridy = 2;
+            gbc.gridwidth = 1;
+            this.add(tcLabel, gbc);
+
+            JTextField tcTextField = new JTextField();
+
+            gbc.gridx = 2;
+            gbc.gridy = 2;
+            gbc.gridwidth = 2;
+            this.add(tcTextField, gbc);
 
             JLabel passwordLabel = new JLabel();
             passwordLabel.setText("Şifre :");
 
 
             gbc.gridx = 1;
-            gbc.gridy = 2;
+            gbc.gridy = 3;
             gbc.gridwidth = 1;
             this.add(passwordLabel, gbc);
 
@@ -76,17 +94,18 @@ public class HastaPanel {
 
 
             gbc.gridx = 2;
-            gbc.gridy = 2;
+            gbc.gridy = 3;
             gbc.gridwidth = 2;
             this.add(passwordTextField, gbc);
 
-            JButton loginButton = new JButton();
+            loginButton = new JButton();
             loginButton.setText("Giriş Yap");
             loginButton.setFocusable(false);
+            loginButton.addActionListener(this);
 
 
             gbc.gridx = 3;
-            gbc.gridy = 3;
+            gbc.gridy = 4;
             gbc.gridwidth = 1;
             this.add(loginButton, gbc);
 
@@ -96,7 +115,7 @@ public class HastaPanel {
             registerButton.addActionListener(this);
 
             gbc.gridx = 2;
-            gbc.gridy = 3;
+            gbc.gridy = 4;
             gbc.gridwidth = 1;
             this.add(registerButton, gbc);
 
@@ -106,13 +125,13 @@ public class HastaPanel {
             goBackLoginButton.addActionListener(this);
 
             gbc.gridx = 1;
-            gbc.gridy = 3;
+            gbc.gridy = 4;
             gbc.gridwidth = 1;
             this.add(goBackLoginButton, gbc);
 
             //Alt Boşluk
             gbc.gridx = 0;
-            gbc.gridy = 4;
+            gbc.gridy = 5;
             gbc.gridwidth = 1;
             this.add(new JPanel(), gbc);
         }
@@ -134,14 +153,23 @@ public class HastaPanel {
                 frame.revalidate();
                 frame.repaint();
             }
+
+            if(e.getSource() == loginButton){
+                System.out.println("Butona basıldı");
+            }
         }
     }
 
-    JTextField nameTextField;
-    JTextField tcTextField;
-    JTextField passwordTextField;
+
 
     public class RegisterPanel extends JPanel implements ActionListener{
+
+        JTextField nameTextField;
+        JTextField tcTextField;
+        JTextField passwordTextField;
+        JButton goBackButton;
+        JButton registerButton;
+
         RegisterPanel(){
             this.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
@@ -250,6 +278,7 @@ public class HastaPanel {
             if (e.getSource() == registerButton){
 
                 BaseUser customer = new Customer();
+                MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
                 try {
 
@@ -257,11 +286,36 @@ public class HastaPanel {
                     customer.password = passwordTextField.getText();
                     customer.tc = Long.parseLong(tcTextField.getText());
 
-                    new Register(customer);
+                    ResultSet resultSet = mysqlDBManager.getInfo(customer.getTable(), customer);
+
+                    if(resultSet.next()){
+                        if(resultSet.getLong("tc") == customer.tc){
+
+                            resultSet.close();
+
+                            JOptionPane.showMessageDialog(null,"Girilen TC numarasına kayıtlı bir" +
+                                            " hesap zaten var",
+                                    "Uyarı",JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else {
+
+                            resultSet.close();
+
+                            new Register(customer);
+                        }
+                    }
+                    else {
+
+                        resultSet.close();
+
+                        new Register(customer);
+                    }
+
+
 
                 }catch (Exception exception){
                     JOptionPane.showMessageDialog(null,"Hata Kodu:"+exception.getMessage(),
-                            "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
+                            "Bir Hata Oluştu (registerButton)",JOptionPane.ERROR_MESSAGE);
                 }
             }
         }

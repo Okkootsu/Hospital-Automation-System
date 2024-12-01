@@ -1,6 +1,10 @@
 import javax.swing.*;
+import java.sql.SQLException;
 
-public class Register {
+public class Register implements ILoginDal {
+
+    MysqlDBManager mysqlDBManager;
+
     Register(BaseUser user){
         if(isIncorrect(user)){
             JOptionPane.showMessageDialog(null,"Girilen bilgiler hatalı \n " +
@@ -8,7 +12,7 @@ public class Register {
                     "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
         }
         else {
-            MysqlDBManager mysqlDBManager = new MysqlDBManager();
+            mysqlDBManager = new MysqlDBManager();
 
             mysqlDBManager.addUser(user.getTable(),user);
 
@@ -17,7 +21,8 @@ public class Register {
         }
     }
 
-    private boolean isIncorrect(BaseUser user){
+    @Override
+    public boolean isIncorrect(BaseUser user) {
 
         if(user.username.isEmpty()){
             return true;
@@ -38,6 +43,7 @@ public class Register {
         if(user.password.length() > 45){
             return true;
         }
+
 
         return false;
     }

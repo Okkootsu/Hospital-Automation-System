@@ -61,14 +61,14 @@ public class MysqlDBManager {
 
             Statement statement = connection.createStatement();
 
-            String query = "SELECT * FROM '"+table+"'" +
-                    "WHERE id = '"+user.id+"'";
+            String query = "SELECT * FROM "+table+" " +
+                    "WHERE tc = "+user.tc;
 
             return statement.executeQuery(query);
 
         }catch (Exception e){
             JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
-                    "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
+                    "Bir Hata Oluştu (getInfo)",JOptionPane.ERROR_MESSAGE);
         }
         return null;
     }
