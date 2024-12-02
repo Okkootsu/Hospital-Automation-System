@@ -1,8 +1,9 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
+
 
 public class HastaPanel {
 
@@ -158,41 +159,31 @@ public class HastaPanel {
             }
 
             if(e.getSource() == loginButton){
-                BaseUser customer = new Customer();
-                MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
-                try{
-                    customer.username = nameTextField.getText();
-                    customer.password = passwordTextField.getText();
+                BaseUser customer = new Customer();
+
+                customer.username = nameTextField.getText();
+                customer.password = passwordTextField.getText();
+
+                try {
+
                     customer.tc = Long.parseLong(tcTextField.getText());
 
-                    ResultSet resultSet = mysqlDBManager.getInfo(customer.getTable(), customer);
+                    Login login = new Login();
 
-                    if(resultSet.next()){
-                        if(resultSet.getLong("tc") == customer.tc){
-                            if(resultSet.getString("fullName").equals(customer.username)){
-                                if(resultSet.getString("password").equals(customer.password)){
-                                    frame.dispose();
-                                    new Login(customer);
-                                }else{
-                                    JOptionPane.showMessageDialog(null,"Girilen bilgiler hatalı",
-                                            "Uyarı",JOptionPane.INFORMATION_MESSAGE);
-                                }
-                            }else {
-                                JOptionPane.showMessageDialog(null,"Girilen bilgiler hatalı",
-                                        "Uyarı",JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        }else {
-                            JOptionPane.showMessageDialog(null,"Kullanıcı sisteme kayıtlı değil",
-                                    "Uyarı",JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    }else {
-                        JOptionPane.showMessageDialog(null,"Kullanıcı sisteme kayıtlı değil",
-                                "Uyarı",JOptionPane.INFORMATION_MESSAGE);
+                    if(login.isCompleted(customer)){
+
+                        frame.dispose();
+
+                        new MainMenuPanel(customer);
+
                     }
+
                 }catch (Exception exception){
-                    JOptionPane.showMessageDialog(null,"Hata Kodu:"+exception.getMessage(),
-                            "Bir Hata Oluştu (loginButton)",JOptionPane.ERROR_MESSAGE);
+
+                    JOptionPane.showMessageDialog(null,"TC boş bırakılamaz" ,
+                            "Uyarı",JOptionPane.ERROR_MESSAGE);
+
                 }
             }
         }
@@ -316,46 +307,25 @@ public class HastaPanel {
             if (e.getSource() == registerButton){
 
                 BaseUser customer = new Customer();
-                MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+                customer.username = nameTextField.getText();
+                customer.password = passwordTextField.getText();
 
                 try {
 
-                    customer.username = nameTextField.getText();
-                    customer.password = passwordTextField.getText();
                     customer.tc = Long.parseLong(tcTextField.getText());
 
-                    ResultSet resultSet = mysqlDBManager.getInfo(customer.getTable(), customer);
-
-                    if(resultSet.next()){
-                        if(resultSet.getLong("tc") == customer.tc){
-
-                            resultSet.close();
-
-                            JOptionPane.showMessageDialog(null,"Girilen TC numarasına kayıtlı bir" +
-                                            " hesap zaten var",
-                                    "Uyarı",JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        else {
-
-                            resultSet.close();
-
-                            new Register(customer);
-                        }
-                    }
-                    else {
-
-                        resultSet.close();
-
-                        new Register(customer);
-                    }
-
-
+                    new Register(customer);
 
                 }catch (Exception exception){
-                    JOptionPane.showMessageDialog(null,"Hata Kodu:"+exception.getMessage(),
-                            "Bir Hata Oluştu (registerButton)",JOptionPane.ERROR_MESSAGE);
+
+                    JOptionPane.showMessageDialog(null,"TC boş bırakılamaz" ,
+                            "Uyarı",JOptionPane.ERROR_MESSAGE);
+
                 }
+
             }
         }
     }
 }
+

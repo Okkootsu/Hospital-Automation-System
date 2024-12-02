@@ -1,5 +1,5 @@
 import javax.swing.*;
-import java.sql.SQLException;
+import java.sql.ResultSet;
 
 public class Register implements ILoginDal {
 
@@ -44,6 +44,26 @@ public class Register implements ILoginDal {
             return true;
         }
 
+        //Tc kontrol
+        try {
+            MysqlDBManager mysqlDBManager = new MysqlDBManager();
+            ResultSet resultSet = mysqlDBManager.getInfo(user.getTable(), user);
+
+            if(resultSet.next()){
+                if(resultSet.getLong("tc") == user.tc){
+
+                    resultSet.close();
+
+                    return true;
+                }
+            }
+
+            resultSet.close();
+
+        }catch (Exception e){
+
+            return true;
+        }
 
         return false;
     }
