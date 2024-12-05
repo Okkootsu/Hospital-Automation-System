@@ -35,6 +35,7 @@ public class HastaPanel {
         JTextField nameTextField;
         JTextField tcTextField;
         JTextField passwordTextField;
+        JButton hackButton; //otomatik giriş yapmak için
 
         MainPanel(){
             this.setLayout(new GridBagLayout());
@@ -51,7 +52,7 @@ public class HastaPanel {
             gbc.gridy = 0;
             this.add(new JPanel(), gbc);
 
-            gbc.gridx = 4;
+            gbc.gridx = 5; //4 olması lazım
             this.add(new JPanel(), gbc);
 
 
@@ -67,7 +68,7 @@ public class HastaPanel {
 
 
             gbc.gridx = 2;
-            gbc.gridwidth = 2; //2 genişlikte
+            gbc.gridwidth = 3; //2 genişlikte
             this.add(nameTextField, gbc);
 
             JLabel tcLabel = new JLabel();
@@ -82,7 +83,7 @@ public class HastaPanel {
 
             gbc.gridx = 2;
             gbc.gridy = 2;
-            gbc.gridwidth = 2;
+            gbc.gridwidth = 3; //2 olmalı
             this.add(tcTextField, gbc);
 
             JLabel passwordLabel = new JLabel();
@@ -99,8 +100,20 @@ public class HastaPanel {
 
             gbc.gridx = 2;
             gbc.gridy = 3;
-            gbc.gridwidth = 2;
+            gbc.gridwidth = 3; //2 olmalı
             this.add(passwordTextField, gbc);
+
+            //Fazlalık
+            hackButton = new JButton();
+            hackButton.setText("Hack");
+            hackButton.setFocusable(false);
+            hackButton.addActionListener(this);
+
+            gbc.gridx = 4;
+            gbc.gridy = 4;
+            gbc.gridwidth = 1;
+            this.add(hackButton, gbc);
+            //
 
             loginButton = new JButton();
             loginButton.setText("Giriş Yap");
@@ -160,7 +173,7 @@ public class HastaPanel {
 
             if(e.getSource() == loginButton){
 
-                BaseUser customer = new Customer();
+                Customer customer = new Customer();
 
                 customer.username = nameTextField.getText();
                 customer.password = passwordTextField.getText();
@@ -185,6 +198,17 @@ public class HastaPanel {
                             "Uyarı",JOptionPane.ERROR_MESSAGE);
 
                 }
+            }
+
+            if(e.getSource() == hackButton){
+                Customer volkan = new Customer();
+                volkan.username = "volkan mutlu";
+                volkan.password = "123456";
+                volkan.tc = 12345678910L;
+                volkan.id = 1;
+
+                frame.dispose();
+                new MainMenuPanel(volkan);
             }
         }
     }

@@ -6,4 +6,9 @@ public class Employee extends BaseUser{
     public String getTable() {
         return table;
     }
+
+    @Override
+    public int getId(BaseUser user) {
+        return -1;
+    }
 }

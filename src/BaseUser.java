@@ -7,4 +7,5 @@ public abstract class BaseUser {
     protected String table;
 
     public abstract String getTable();
+    public abstract int getId(BaseUser user);
 }

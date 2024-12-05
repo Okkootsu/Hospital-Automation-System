@@ -13,6 +13,7 @@ public class Login implements ILoginDal{
             return false;
         }
         else {
+            user.id = user.getId(user);
             return true;
         }
 
