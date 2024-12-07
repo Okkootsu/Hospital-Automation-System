@@ -1,5 +1,3 @@
-import javax.lang.model.type.NullType;
-import javax.swing.*;
 
 // CamelCasing kullanılıyor
 
