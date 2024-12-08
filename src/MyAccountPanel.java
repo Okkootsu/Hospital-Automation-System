@@ -139,6 +139,25 @@ public class MyAccountPanel extends JPanel implements IPanel {
 
         JButton delAccountBtn = new JButton("Hesabı Sil");
         delAccountBtn.setFocusable(false);
+        delAccountBtn.addActionListener(e -> {
+            int choice = JOptionPane.showOptionDialog(this,"Hesabınızı KALICI olarak silmek istediğinize emin misiniz?",
+                    "Uyarı!",JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,null,null,0);
+
+            if(choice == 0){
+
+                customer.delUser();
+
+                JOptionPane.showMessageDialog(null,"Kullanıcı sistemden başarıyla silindi" ,
+                        "Bilgilendirme",JOptionPane.INFORMATION_MESSAGE);
+
+                MainMenuPanel.getInstance(customer).dispose();
+                MainMenuPanel.resetInstance();
+
+
+                new LoginPanel();
+            }
+        });
 
         gbc.gridx = 2;  gbc.gridy = 5;  gbc.gridwidth = 1;
         accountPanel.add(delAccountBtn, gbc);
@@ -153,6 +172,17 @@ public class MyAccountPanel extends JPanel implements IPanel {
 
         JButton logOffBtn = new JButton("Çıkış Yap");
         logOffBtn.setFocusable(false);
+        logOffBtn.addActionListener(e -> {
+            int choice = JOptionPane.showOptionDialog(this,"Çıkış yapmak istediğinize emin misiniz?",
+                    "Uyarı!",JOptionPane.YES_NO_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,null,null,0);
+
+            if(choice == 0){
+                MainMenuPanel.getInstance(customer).dispose();
+                MainMenuPanel.resetInstance();
+                new LoginPanel();
+            }
+        });
 
         gbc.gridx = 0;  gbc.gridy = 5;  gbc.gridwidth = 1;
         accountPanel.add(logOffBtn, gbc);

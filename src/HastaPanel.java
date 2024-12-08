@@ -188,7 +188,7 @@ public class HastaPanel {
 
                         frame.dispose();
 
-                        new MainMenuPanel(customer);
+                        MainMenuPanel mainMenuPanel = MainMenuPanel.getInstance(customer);
 
                     }
 
@@ -205,10 +205,10 @@ public class HastaPanel {
                 volkan.username = "volkan mutlu";
                 volkan.password = "123456";
                 volkan.tc = 12345678910L;
-                volkan.id = 1;
+                volkan.id = 7;
 
                 frame.dispose();
-                new MainMenuPanel(volkan);
+                MainMenuPanel mainMenuPanel = MainMenuPanel.getInstance(volkan);
             }
         }
     }

@@ -48,8 +48,23 @@ public class MysqlDBManager {
     }
 
 
-    public void deleteUser() {
+    public void deleteUser(String table, int userID) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
+            Connection connection = DriverManager.getConnection(getSqlUrl(),getSqlUsername(),getSqlPassword());
+
+            Statement statement = connection.createStatement();
+
+            String query = "DELETE FROM "+table+" " +
+                    "WHERE id = "+userID;
+
+            statement.execute(query);
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 

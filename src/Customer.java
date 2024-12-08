@@ -34,6 +34,13 @@ public class Customer extends BaseUser implements IAppointmentQueries{
     }
 
     @Override
+    public void delUser() {
+        MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+        mysqlDBManager.deleteUser(getTable(), this.id);
+    }
+
+    @Override
     public void createApt(int id, String clinic, String doctor, String date) {
         try {
             MysqlDBManager mysqlDBManager = new MysqlDBManager();

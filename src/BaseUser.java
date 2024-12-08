@@ -8,4 +8,5 @@ public abstract class BaseUser {
 
     public abstract String getTable();
     public abstract int getId(BaseUser user);
+    public abstract void delUser();
 }

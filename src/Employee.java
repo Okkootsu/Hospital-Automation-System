@@ -11,4 +11,9 @@ public class Employee extends BaseUser{
     public int getId(BaseUser user) {
         return -1;
     }
+
+    @Override
+    public void delUser() {
+
+    }
 }

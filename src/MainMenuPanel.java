@@ -1,27 +1,47 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class MainMenuPanel {
+public class MainMenuPanel extends JFrame {
 
-    JFrame frame;
+    //Singleton tasarım deseni
+
+    private static MainMenuPanel instance;
+    private Customer customer;
     MainPanel mainPanel;
-    Customer pointerCustomer;
 
-    MainMenuPanel(Customer customer){
-        frame = new JFrame();
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Ana Sayfa");
-        frame.setBackground(new Color(203, 220, 235));
-        frame.setSize(1200,700);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout());
+    private MainMenuPanel(Customer customer){
+        this.customer = customer;
+        initUI();
+    }
+
+    public static MainMenuPanel getInstance(Customer customer) {
+        if (instance == null) {
+            instance = new MainMenuPanel(customer);
+        }
+        return instance;
+    }
+
+    private void initUI() {
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Ana Sayfa");
+        this.setBackground(new Color(203, 220, 235));
+        this.setSize(1200,700);
+        this.setLocationRelativeTo(null);
+        this.setLayout(new BorderLayout());
 
 
-        pointerCustomer = customer;
-        mainPanel = new MainPanel(pointerCustomer);
+        mainPanel = new MainPanel(customer);
 
-        frame.add(mainPanel);
+        this.add(mainPanel);
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public static void resetInstance() {
+        instance = null;
     }
 
     private class MainPanel extends JPanel {
