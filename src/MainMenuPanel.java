@@ -6,17 +6,17 @@ public class MainMenuPanel extends JFrame {
     //Singleton tasarım deseni
 
     private static MainMenuPanel instance;
-    private Customer customer;
-    MainPanel mainPanel;
+    private BaseUser user;
+    JPanel mainPanel;
 
-    private MainMenuPanel(Customer customer){
-        this.customer = customer;
+    private MainMenuPanel(BaseUser user){
+        this.user = user;
         initUI();
     }
 
-    public static MainMenuPanel getInstance(Customer customer) {
+    public static MainMenuPanel getInstance(BaseUser user) {
         if (instance == null) {
-            instance = new MainMenuPanel(customer);
+            instance = new MainMenuPanel(user);
         }
         return instance;
     }
@@ -30,14 +30,25 @@ public class MainMenuPanel extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
 
+        String type = user.getUserType();
 
-        mainPanel = new MainPanel(customer);
+        if ( user instanceof Customer ){
+
+            mainPanel = new MainPanel(user);
+
+        }
+
+        if (user instanceof Employee){
+
+            mainPanel = new MainAdminPanel(user);
+
+        }
 
         this.add(mainPanel);
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public BaseUser getUser() {
+        return user;
     }
 
     public static void resetInstance() {
@@ -49,35 +60,34 @@ public class MainMenuPanel extends JFrame {
         CardLayout cardLayout;
         JPanel mainCardPanel;
 
-        MainPanel(Customer customer){
+        MainPanel(BaseUser customer){
             this.setLayout(new BorderLayout()); // marginler (10,10)
 
             //BorderLayout sınırları
-            //Center ayrı class'da oluşturulsun?
+
             JPanel header = new JPanel();
             JPanel westContainer = new JPanel();
             JPanel eastContainer = new JPanel();
             JPanel footer = new JPanel();
-//            JPanel centerContainer = new JPanel();
+
 
             header.setBackground(new Color(31, 80, 154));
             westContainer.setBackground(new Color(203, 220, 235));
             eastContainer.setBackground(new Color(203, 220, 235));
             footer.setBackground(new Color(203, 220, 235));
-//            centerContainer.setBackground(new Color(203, 220, 235));
 
 
             header.setPreferredSize(new Dimension(100,75));
             westContainer.setPreferredSize(new Dimension(150,100)); //100
             eastContainer.setPreferredSize(new Dimension(150,100)); //100
             footer.setPreferredSize(new Dimension(100,75));
-//            centerContainer.setPreferredSize(new Dimension(100,100));
+
 
             this.add(header, BorderLayout.NORTH);
             this.add(eastContainer, BorderLayout.EAST);
             this.add(westContainer, BorderLayout.WEST);
             this.add(footer, BorderLayout.SOUTH);
-//            this.add(centerContainer, BorderLayout.CENTER);
+
             //-------
 
             //Center
@@ -176,6 +186,104 @@ public class MainMenuPanel extends JFrame {
 
                 cardLayout.show(mainCardPanel, "My Account");
             });
+
+            accountPanel.add(accountBtn);
+
+            header.add(accountPanel);
+
+            //-----------------
+        }
+    }
+
+    private class MainAdminPanel extends JPanel{
+
+        MainAdminPanel(BaseUser employee){
+            this.setLayout(new BorderLayout()); // marginler (10,10)
+
+            //BorderLayout sınırları
+
+            JPanel header = new JPanel();
+            JPanel westContainer = new JPanel();
+            JPanel eastContainer = new JPanel();
+            JPanel footer = new JPanel();
+
+
+            header.setBackground(new Color(31, 80, 154));
+            westContainer.setBackground(new Color(203, 220, 235));
+            eastContainer.setBackground(new Color(203, 220, 235));
+            footer.setBackground(new Color(203, 220, 235));
+
+
+            header.setPreferredSize(new Dimension(100,75));
+            westContainer.setPreferredSize(new Dimension(150,100)); //100
+            eastContainer.setPreferredSize(new Dimension(150,100)); //100
+            footer.setPreferredSize(new Dimension(100,75));
+
+
+            this.add(header, BorderLayout.NORTH);
+            this.add(eastContainer, BorderLayout.EAST);
+            this.add(westContainer, BorderLayout.WEST);
+            this.add(footer, BorderLayout.SOUTH);
+
+            //-------
+
+            //Center
+
+            CardLayout cardLayout = new CardLayout();
+            JPanel mainCardPanel = new JPanel(cardLayout); //sayfa geçişleri için ana bağlantıyı tutar
+
+            UserConfigsPanel mainAdminPanel = new UserConfigsPanel(mainCardPanel, cardLayout, employee);
+
+//            MyAccountPanel myAccountPanel = new MyAccountPanel(mainCardPanel, cardLayout, employee);
+
+            mainCardPanel.add(mainAdminPanel, "Admin Center");
+//            mainCardPanel.add(myAccountPanel, "My Account");
+
+            cardLayout.show(mainCardPanel, "Admin Center");
+
+            this.add(mainCardPanel, BorderLayout.CENTER);
+
+            //header
+            header.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 15));
+
+            Dimension buttonSize = new Dimension(125,45);
+
+            JButton mainMenuBtn = new JButton("Ana Sayfa");
+            mainMenuBtn.setFocusable(false);
+            mainMenuBtn.setPreferredSize(buttonSize);
+
+            mainMenuBtn.addActionListener(e -> {
+                // Geri dönmeden önce güncelle
+                if (mainCardPanel.getComponent(0) instanceof UserConfigsPanel userConfigsPanel) {
+                    userConfigsPanel.refreshContent(mainCardPanel, cardLayout);
+                }
+
+                cardLayout.show(mainCardPanel, "Admin Center");
+            });
+
+            header.add(mainMenuBtn);
+
+            //Boş kısımlar
+
+            JPanel accountPanel = new JPanel();
+            accountPanel.setPreferredSize(new Dimension(760,45));
+            accountPanel.setBackground(Color.black);
+            accountPanel.setOpaque(false);
+            accountPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,0,0));
+
+            //Hesap butonu
+            JButton accountBtn = new JButton("Hesabım");
+            accountBtn.setFocusable(false);
+            accountBtn.setPreferredSize(new Dimension(90,45));
+
+//            accountBtn.addActionListener(e -> {
+//                // Geri dönmeden önce güncelle
+//                if (mainCardPanel.getComponent(0) instanceof MyAccountPanel myAccPanel) {
+//                    myAccPanel.refreshContent(mainCardPanel, cardLayout);
+//                }
+//
+//                cardLayout.show(mainCardPanel, "My Account");
+//            });
 
             accountPanel.add(accountBtn);
 

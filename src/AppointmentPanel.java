@@ -8,9 +8,9 @@ public class AppointmentPanel {
     public static class MainCenterPanel extends JPanel implements IPanel {
 
         private JPanel tempPanel;
-        private final Customer customer;
+        private final BaseUser customer;
 
-        MainCenterPanel(JPanel mainCardPanel, CardLayout cardLayout, Customer customer) {
+        MainCenterPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer) {
             this.customer = customer; // Müşteri bilgisini sakla
             initializePanel(mainCardPanel, cardLayout);
         }
@@ -104,7 +104,7 @@ public class AppointmentPanel {
             this.repaint();    // Paneli yeniden boya
         } // void refreshContent sonu
 
-        private static boolean appointmentExists(Customer customer) {
+        private static boolean appointmentExists(BaseUser customer) {
 
             try {
                 ResultSet resultSet = customer.getApt(customer);
@@ -121,7 +121,7 @@ public class AppointmentPanel {
             return false;
         }
 
-        private JPanel createCells(Customer customer) {
+        private JPanel createCells(BaseUser customer) {
             ResultSet resultSet = customer.getApt(customer);
             String clinic;
             String doctor;
@@ -229,7 +229,7 @@ public class AppointmentPanel {
         JButton goBackBtn;
         JButton saveBtn;
 
-        CreateAptPanel(JPanel mainCardPanel, CardLayout cardLayout, Customer customer){
+        CreateAptPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer){
 
             this.setBackground(new Color(203, 220, 235));
             this.setPreferredSize(new Dimension(100,100));

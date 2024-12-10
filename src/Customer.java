@@ -4,9 +4,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class Customer extends BaseUser implements IAppointmentQueries{
+public class Customer extends BaseUser{
 
     private String table = "customer";
+    private String userType = "customer";
 
     @Override
     public String getTable() {
@@ -38,6 +39,31 @@ public class Customer extends BaseUser implements IAppointmentQueries{
         MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
         mysqlDBManager.deleteUser(getTable(), this.id);
+    }
+
+    @Override
+    public String getUsername(BaseUser user) {
+
+        try {
+            MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+            ResultSet resultSet = mysqlDBManager.getInfo(getTable(),user);
+
+            resultSet.next();
+
+            return resultSet.getString("fullName");
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu(getId)",JOptionPane.ERROR_MESSAGE);
+        }
+
+        return "";
+    }
+
+    @Override
+    public String getUserType() {
+        return userType;
     }
 
     @Override

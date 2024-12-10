@@ -3,9 +3,9 @@ import java.awt.*;
 
 public class MyAccountPanel extends JPanel implements IPanel {
 
-    private final Customer customer;
+    private final BaseUser customer;
 
-    MyAccountPanel(JPanel mainCardPanel, CardLayout cardLayout, Customer customer){
+    MyAccountPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer){
         this.customer = customer;
         initializePanel(mainCardPanel, cardLayout);
     }

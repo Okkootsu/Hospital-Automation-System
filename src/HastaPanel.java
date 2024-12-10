@@ -56,52 +56,47 @@ public class HastaPanel {
             this.add(new JPanel(), gbc);
 
 
-            JLabel nameLabel = new JLabel();
-            nameLabel.setText("Ad Soyad:");
+//            JLabel nameLabel = new JLabel();
+//            nameLabel.setText("Ad Soyad:");
+//
+//
+//            gbc.gridx = 1;
+//            gbc.gridy = 1;
+//            this.add(nameLabel, gbc);
+//
+//            nameTextField = new JTextField();
 
 
-            gbc.gridx = 1;
-            gbc.gridy = 1;
-            this.add(nameLabel, gbc);
+//            gbc.gridx = 2;
+//            gbc.gridwidth = 3; //2 genişlikte
+//            this.add(nameTextField, gbc);
 
-            nameTextField = new JTextField();
-
-
-            gbc.gridx = 2;
-            gbc.gridwidth = 3; //2 genişlikte
-            this.add(nameTextField, gbc);
 
             JLabel tcLabel = new JLabel();
             tcLabel.setText("TC Kimlik No:");
 
-            gbc.gridx = 1;
-            gbc.gridy = 2;
-            gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 1;  gbc.gridwidth = 1;
             this.add(tcLabel, gbc);
 
-            tcTextField = new JTextField();
 
-            gbc.gridx = 2;
-            gbc.gridy = 2;
-            gbc.gridwidth = 3; //2 olmalı
+            tcTextField = new JTextField();
+                                                    //2 olmalı
+            gbc.gridx = 2;  gbc.gridy = 1;  gbc.gridwidth = 3;
             this.add(tcTextField, gbc);
+
 
             JLabel passwordLabel = new JLabel();
             passwordLabel.setText("Şifre :");
 
-
-            gbc.gridx = 1;
-            gbc.gridy = 3;
-            gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 2;  gbc.gridwidth = 1;
             this.add(passwordLabel, gbc);
 
+
             passwordTextField = new JTextField();
-
-
-            gbc.gridx = 2;
-            gbc.gridy = 3;
-            gbc.gridwidth = 3; //2 olmalı
+                                                    //2 olmalı
+            gbc.gridx = 2;  gbc.gridy = 2;  gbc.gridwidth = 3;
             this.add(passwordTextField, gbc);
+
 
             //Fazlalık
             hackButton = new JButton();
@@ -110,7 +105,7 @@ public class HastaPanel {
             hackButton.addActionListener(this);
 
             gbc.gridx = 4;
-            gbc.gridy = 4;
+            gbc.gridy = 3;
             gbc.gridwidth = 1;
             this.add(hackButton, gbc);
             //
@@ -120,36 +115,29 @@ public class HastaPanel {
             loginButton.setFocusable(false);
             loginButton.addActionListener(this);
 
-
-            gbc.gridx = 3;
-            gbc.gridy = 4;
-            gbc.gridwidth = 1;
+            gbc.gridx = 3;  gbc.gridy = 3;  gbc.gridwidth = 1;
             this.add(loginButton, gbc);
+
 
             registerButton = new JButton();
             registerButton.setText("Kayıt Ol");
             registerButton.setFocusable(false);
             registerButton.addActionListener(this);
 
-            gbc.gridx = 2;
-            gbc.gridy = 4;
-            gbc.gridwidth = 1;
+            gbc.gridx = 2;  gbc.gridy = 3;  gbc.gridwidth = 1;
             this.add(registerButton, gbc);
+
 
             goBackLoginButton = new JButton();
             goBackLoginButton.setText("Geri Dön");
             goBackLoginButton.setFocusable(false);
             goBackLoginButton.addActionListener(this);
 
-            gbc.gridx = 1;
-            gbc.gridy = 4;
-            gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 3;  gbc.gridwidth = 1;
             this.add(goBackLoginButton, gbc);
 
             //Alt Boşluk
-            gbc.gridx = 0;
-            gbc.gridy = 5;
-            gbc.gridwidth = 1;
+            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
             this.add(new JPanel(), gbc);
         }
 
@@ -175,7 +163,6 @@ public class HastaPanel {
 
                 Customer customer = new Customer();
 
-                customer.username = nameTextField.getText();
                 customer.password = passwordTextField.getText();
 
                 try {

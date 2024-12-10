@@ -14,6 +14,7 @@ public class Login implements ILoginDal{
         }
         else {
             user.id = user.getId(user);
+            user.username = user.getUsername(user);
             return true;
         }
 
@@ -22,19 +23,12 @@ public class Login implements ILoginDal{
     @Override
     public boolean isIncorrect(BaseUser user) {
 
-        if(user.username.isEmpty()){
-            return true;
-        }
 
         if(user.password.isEmpty()){
             return true;
         }
 
         if(String.valueOf(Math.abs(user.tc)).length() != 11){
-            return true;
-        }
-
-        if(user.username.length() > 45){
             return true;
         }
 
@@ -50,11 +44,6 @@ public class Login implements ILoginDal{
             if(resultSet.next()){
 
                 if(resultSet.getLong("tc") != user.tc){
-                    resultSet.close();
-                    return true;
-                }
-
-                if( !(resultSet.getString("fullName").equals(user.username)) ){
                     resultSet.close();
                     return true;
                 }
