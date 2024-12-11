@@ -164,8 +164,21 @@ public class MyAccountPanel {
             accountPanel.add(delAccountBtn, gbc);
 
 
-            JButton updateAccountBtn = new JButton("Hesap Bilgilerini Güncelle");
+            JButton updateAccountBtn = new JButton("Şifreyi Güncelle");
             updateAccountBtn.setFocusable(false);
+            updateAccountBtn.addActionListener(e -> {
+                String newPass = JOptionPane.showInputDialog("Yeni Şifre:");
+
+                if(newPass == null || newPass.isEmpty()){
+                    JOptionPane.showMessageDialog(null,"Şifre değiştirme işlemi iptal edildi" ,
+                            "Uyarı",JOptionPane.ERROR_MESSAGE);
+                }
+
+                else {
+                    customer.update("password",newPass);
+                    customer.password = newPass;
+                }
+            });
 
             gbc.gridx = 1;  gbc.gridy = 5;  gbc.gridwidth = 1;
             accountPanel.add(updateAccountBtn, gbc);
@@ -361,7 +374,7 @@ public class MyAccountPanel {
             accountPanel.add(delAccountBtn, gbc);
 
 
-            JButton updateAccountBtn = new JButton("Hesap Bilgilerini Güncelle");
+            JButton updateAccountBtn = new JButton("Şifreyi Güncelle");
             updateAccountBtn.setFocusable(false);
             updateAccountBtn.addActionListener(e -> {
 

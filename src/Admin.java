@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Admin extends Employee {
@@ -41,5 +42,36 @@ public class Admin extends Employee {
         MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
         mysqlDBManager.deleteUser(getTable(), this.id);
+    }
+
+    @Override
+    public ResultSet getUsers(){
+        try {
+            MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection connection = DriverManager.getConnection(mysqlDBManager.getSqlUrl(),
+                    mysqlDBManager.getSqlUsername(),mysqlDBManager.getSqlPassword());
+
+            Statement statement = connection.createStatement();
+
+            String query = "SELECT * FROM "+getTable()+" ";
+
+            return statement.executeQuery(query);
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu (getInfo)",JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
+
+    public void delUser(int id) {
+        MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+        mysqlDBManager.deleteUser(getTable(), id);
     }
 }

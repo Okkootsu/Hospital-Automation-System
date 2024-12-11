@@ -102,6 +102,16 @@ public class Customer extends BaseUser{
     }
 
     @Override
+    public void updateInfo() {
+
+    }
+
+    @Override
+    public ResultSet getUsers() {
+        return null;
+    }
+
+    @Override
     public ResultSet getApt(BaseUser user) {
         try {
             MysqlDBManager mysqlDBManager = new MysqlDBManager();

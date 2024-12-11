@@ -20,4 +20,8 @@ public abstract class BaseUser {
     public abstract void update(String update, String newValue);
 
     public abstract JPanel getPanel();
+
+    public abstract void updateInfo();
+
+    public abstract ResultSet getUsers();
 }

@@ -62,6 +62,37 @@ public class Employee extends BaseUser{
     }
 
     @Override
+    public void updateInfo() {
+
+        MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+        try {
+            ResultSet resultSet = mysqlDBManager.getInfo(getTable(),this);
+
+            if(resultSet.next()){
+                this.username = resultSet.getString("fullName");
+                this.password = resultSet.getString("password");
+                this.tc = resultSet.getLong("tc");
+                this.id = getId(this);
+            }
+
+            else {
+                JOptionPane.showMessageDialog(null,"Kullanıcı bulunamadı" ,
+                        "Uyarı!",JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata kodu: "+e.getMessage() ,
+                    "Bir Hata Oluştu!",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    @Override
+    public ResultSet getUsers() {
+        return null;
+    }
+
+    @Override
     public String getUsername(BaseUser user) {
 
         try {

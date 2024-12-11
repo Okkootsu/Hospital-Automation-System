@@ -1,5 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.ResultSet;
 import java.util.Objects;
 
 public class UserConfigsPanel extends JPanel implements IPanel{
@@ -24,8 +28,10 @@ public class UserConfigsPanel extends JPanel implements IPanel{
         this.removeAll();
 
         UserAddPanel userAddPanel = new UserAddPanel(mainCardPanel, cardLayout);
+        UserDelPanel userDelPanel = new UserDelPanel(mainCardPanel, cardLayout);
 
         mainCardPanel.add(userAddPanel, "Kullanıcı Ekle");
+        mainCardPanel.add(userDelPanel, "Kullanıcı Sil");
 
         JPanel tempPanel = new JPanel();
         tempPanel.setPreferredSize(new Dimension(300, 325));
@@ -65,7 +71,14 @@ public class UserConfigsPanel extends JPanel implements IPanel{
 
         JButton userDelBtn = new JButton("Kullanıcı Sil");
         userDelBtn.setFocusable(false);
-        userDelBtn.addActionListener(null); //////////
+        userDelBtn.addActionListener(e -> {
+            // Geri dönmeden önce güncelle
+            if (mainCardPanel.getComponent(0) instanceof UserDelPanel userDelPanel1) {
+                userDelPanel1.refreshContent(mainCardPanel, cardLayout);
+            }
+
+            cardLayout.show(mainCardPanel, "Kullanıcı Sil");
+        });
 
         gbc.gridx = 1;  gbc.gridy = 2; gbc.gridwidth = 1;
         tempPanel.add(userDelBtn, gbc);
@@ -231,5 +244,119 @@ public class UserConfigsPanel extends JPanel implements IPanel{
             this.revalidate(); // Bileşenleri yeniden düzenle
             this.repaint();
         }
+    }
+
+    private class UserDelPanel extends JPanel implements IPanel {
+
+        UserDelPanel(JPanel mainCardPanel, CardLayout cardLayout) {
+            initializePanel(mainCardPanel, cardLayout);
+        }
+
+        @Override
+        public void initializePanel(JPanel mainCardPanel, CardLayout cardLayout) {
+            this.setBackground(new Color(203, 220, 235));
+            this.setPreferredSize(new Dimension(100, 100));
+            this.setLayout(new BorderLayout());
+            refreshContent(mainCardPanel, cardLayout);
+        }
+
+        @Override
+        public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
+            this.removeAll();
+
+            JPanel tempPanel = new JPanel();
+            tempPanel.setOpaque(false);
+            tempPanel.setLayout(new BorderLayout());
+            tempPanel.setPreferredSize(new Dimension(100,375));
+            tempPanel.setBackground(Color.cyan);
+
+            JPanel westPanel = new JPanel();
+            westPanel.setPreferredSize(new Dimension(200,100));
+            westPanel.setOpaque(false);
+
+            JPanel eastPanel = new JPanel();
+            eastPanel.setPreferredSize(new Dimension(200,100));
+            eastPanel.setOpaque(false);
+
+            tempPanel.add(westPanel, BorderLayout.WEST);
+            tempPanel.add(eastPanel, BorderLayout.EAST);
+
+            JPanel empList = new RoundedPanel(30,30,Color.BLACK,3);
+            empList.setBackground(new Color(245, 240, 205));
+            empList.setPreferredSize(new Dimension(100,100));
+            empList.setLayout(new GridBagLayout());
+
+            Font font = new Font("Times New Roman",Font.PLAIN,35);
+
+            GridBagConstraints gbc = new GridBagConstraints();
+
+            gbc.weightx = 1.0; // Yatayda boş alan paylaşımı
+            gbc.weighty = 1.0; // Dikeyde boş alan paylaşımı
+            gbc.fill = GridBagConstraints.BOTH; // Hem yatayda hem dikeyde genişle
+            gbc.insets = new Insets(10, 10, 10, 10); // Boşlukları sıfırla
+
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+
+            try {
+                ResultSet resultSet = admin.getUsers();
+
+                while (resultSet.next()) {
+
+                    int userID = resultSet.getInt("id");
+
+                    JLabel userLabel = new JLabel(resultSet.getString("fullName") + "          " +
+                            resultSet.getString("role"));
+                    userLabel.setFont(font);
+                    userLabel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                            userLabel.setBackground(new Color(255, 232, 147));
+                            userLabel.setOpaque(true);
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                            userLabel.setBackground(new Color(245, 240, 205));
+                            userLabel.setOpaque(true);
+                        }
+
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+
+                            int choice = JOptionPane.showOptionDialog(null,"Bu kullanıcıyı " +
+                                            "silmek isrediğinize emin misiniz?",
+                                    "Uyarı!",JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.INFORMATION_MESSAGE,null,null,0);
+
+                            if(choice == 0){
+                                admin.delUser(userID);
+                                empList.remove(userLabel);
+
+                                empList.revalidate();
+                                empList.repaint();
+                            }
+                        }
+
+                    });
+
+                    empList.add(userLabel, gbc);
+
+                    gbc.gridy++;
+                }
+
+            }catch (Exception exception){
+                JOptionPane.showMessageDialog(null,"Hata kodu: "+exception.getMessage() ,
+                        "Bir Hata Oluştu!",JOptionPane.ERROR_MESSAGE);
+            }
+
+            tempPanel.add(empList, BorderLayout.CENTER);
+
+            this.add(tempPanel, BorderLayout.NORTH);
+
+            this.revalidate(); // Bileşenleri yeniden düzenle
+            this.repaint();
+        }
+
     }
 }
