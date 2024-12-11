@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 public class Employee extends BaseUser{
 
     private String table = "employee";
-    private String userType = "employee";
+    private String userRole = "Çalışan";
 
     @Override
     public String getTable() {
@@ -45,6 +45,23 @@ public class Employee extends BaseUser{
     }
 
     @Override
+    public void addEmployee(BaseUser employee, String userRole) {
+
+    }
+
+    @Override
+    public void update(String update, String newValue) {
+        MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+        mysqlDBManager.updateInfo(getTable(), this, update, newValue);
+    }
+
+    @Override
+    public JPanel getPanel() {
+        return null;
+    }
+
+    @Override
     public String getUsername(BaseUser user) {
 
         try {
@@ -64,8 +81,4 @@ public class Employee extends BaseUser{
         return "";
     }
 
-    @Override
-    public String getUserType() {
-        return userType;
-    }
 }

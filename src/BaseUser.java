@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.sql.ResultSet;
 
 public abstract class BaseUser {
@@ -12,8 +13,11 @@ public abstract class BaseUser {
     public abstract String getTable();
     public abstract int getId(BaseUser user);
     public abstract String getUsername(BaseUser user);
-    public abstract String getUserType();
     public abstract void delUser();
     public abstract ResultSet getApt(BaseUser user);
     public abstract void createApt(int id, String clinic, String doctor, String date);
+    public abstract void addEmployee(BaseUser employee, String userRole);
+    public abstract void update(String update, String newValue);
+
+    public abstract JPanel getPanel();
 }

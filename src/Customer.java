@@ -7,7 +7,7 @@ import java.sql.Statement;
 public class Customer extends BaseUser{
 
     private String table = "customer";
-    private String userType = "customer";
+    private String userType = "Hasta";
 
     @Override
     public String getTable() {
@@ -62,11 +62,6 @@ public class Customer extends BaseUser{
     }
 
     @Override
-    public String getUserType() {
-        return userType;
-    }
-
-    @Override
     public void createApt(int id, String clinic, String doctor, String date) {
         try {
             MysqlDBManager mysqlDBManager = new MysqlDBManager();
@@ -87,6 +82,23 @@ public class Customer extends BaseUser{
             JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
                     "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    @Override
+    public void addEmployee(BaseUser employee, String userRole) {
+
+    }
+
+    @Override
+    public void update(String update, String newValue) {
+        MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+        mysqlDBManager.updateInfo(getTable(), this, update, newValue);
+    }
+
+    @Override
+    public JPanel getPanel() {
+        return new MainMenuPanel.MainPanel(this);
     }
 
     @Override

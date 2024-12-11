@@ -43,8 +43,25 @@ public class MysqlDBManager {
     }
 
 
-    public void updateInfo() {
+    public void updateInfo(String table, BaseUser user, String update, String newValue) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
+            Connection connection = DriverManager.getConnection(getSqlUrl(),getSqlUsername(),getSqlPassword());
+
+            Statement statement = connection.createStatement();
+
+            String query = "UPDATE "+table+" " +
+                            "SET "+update+" = '"+newValue+"' " +
+                            "WHERE id = " + user.id;
+
+
+            statement.execute(query);
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 

@@ -30,19 +30,7 @@ public class MainMenuPanel extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
 
-        String type = user.getUserType();
-
-        if ( user instanceof Customer ){
-
-            mainPanel = new MainPanel(user);
-
-        }
-
-        if (user instanceof Employee){
-
-            mainPanel = new MainAdminPanel(user);
-
-        }
+        mainPanel = user.getPanel();
 
         this.add(mainPanel);
     }
@@ -55,7 +43,7 @@ public class MainMenuPanel extends JFrame {
         instance = null;
     }
 
-    private class MainPanel extends JPanel {
+    public static class MainPanel extends JPanel {
 
         CardLayout cardLayout;
         JPanel mainCardPanel;
@@ -101,7 +89,7 @@ public class MainMenuPanel extends JFrame {
             TestResultsPanel testResultsPanel = new TestResultsPanel(mainCardPanel, cardLayout, customer);
             DiagnosesPanel diagnosesPanel = new DiagnosesPanel(mainCardPanel, cardLayout, customer);
 
-            MyAccountPanel myAccountPanel = new MyAccountPanel(mainCardPanel, cardLayout, customer);
+            MyAccountPanel.CustomerPanel myAccountPanel = new MyAccountPanel.CustomerPanel(mainCardPanel, cardLayout, customer);
 
             mainCardPanel.add(mainCenterPanel, "Main Center");
             mainCardPanel.add(createAptPanel, "Create Apt");
@@ -114,9 +102,13 @@ public class MainMenuPanel extends JFrame {
             this.add(mainCardPanel, BorderLayout.CENTER);
 
             //header
-            header.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 15));
+            header.setLayout(new GridLayout(1,2)); //LEADING 10,15
 
             Dimension buttonSize = new Dimension(125,45);
+
+            JPanel leftPanel = new JPanel();
+            leftPanel.setOpaque(false);
+            leftPanel.setLayout(new FlowLayout(FlowLayout.LEADING,10,15));
 
             JButton mainMenuBtn = new JButton("Ana Sayfa");
             mainMenuBtn.setFocusable(false);
@@ -131,7 +123,7 @@ public class MainMenuPanel extends JFrame {
                 cardLayout.show(mainCardPanel, "Main Center");
             });
 
-            header.add(mainMenuBtn);
+            leftPanel.add(mainMenuBtn);
 
 
             JButton testResultsBtn = new JButton("Test Sonuçları");
@@ -147,7 +139,7 @@ public class MainMenuPanel extends JFrame {
                 cardLayout.show(mainCardPanel, "Test Results");
             });
 
-            header.add(testResultsBtn);
+            leftPanel.add(testResultsBtn);
 
 
             JButton illnessesBtn = new JButton("Tanılar");
@@ -163,15 +155,11 @@ public class MainMenuPanel extends JFrame {
                 cardLayout.show(mainCardPanel, "Diagnoses");
             });
 
-            header.add(illnessesBtn);
+            leftPanel.add(illnessesBtn);
 
-            //Boş kısımlar
-
-            JPanel accountPanel = new JPanel();
-            accountPanel.setPreferredSize(new Dimension(760,45));
-            accountPanel.setBackground(Color.black);
-            accountPanel.setOpaque(false);
-            accountPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,0,0));
+            JPanel rightPanel = new JPanel();
+            rightPanel.setOpaque(false);
+            rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,10,15));
 
             //Hesap butonu
             JButton accountBtn = new JButton("Hesabım");
@@ -180,24 +168,25 @@ public class MainMenuPanel extends JFrame {
 
             accountBtn.addActionListener(e -> {
                 // Geri dönmeden önce güncelle
-                if (mainCardPanel.getComponent(0) instanceof MyAccountPanel myAccPanel) {
+                if (mainCardPanel.getComponent(0) instanceof MyAccountPanel.CustomerPanel myAccPanel) {
                     myAccPanel.refreshContent(mainCardPanel, cardLayout);
                 }
 
                 cardLayout.show(mainCardPanel, "My Account");
             });
 
-            accountPanel.add(accountBtn);
+            rightPanel.add(accountBtn);
 
-            header.add(accountPanel);
+            header.add(leftPanel);
+            header.add(rightPanel);
 
             //-----------------
         }
     }
 
-    private class MainAdminPanel extends JPanel{
+    public static class MainAdminPanel extends JPanel{
 
-        MainAdminPanel(BaseUser employee){
+        MainAdminPanel(Admin admin){
             this.setLayout(new BorderLayout()); // marginler (10,10)
 
             //BorderLayout sınırları
@@ -232,19 +221,23 @@ public class MainMenuPanel extends JFrame {
             CardLayout cardLayout = new CardLayout();
             JPanel mainCardPanel = new JPanel(cardLayout); //sayfa geçişleri için ana bağlantıyı tutar
 
-            UserConfigsPanel mainAdminPanel = new UserConfigsPanel(mainCardPanel, cardLayout, employee);
+            UserConfigsPanel mainAdminPanel = new UserConfigsPanel(mainCardPanel, cardLayout, admin);
 
-//            MyAccountPanel myAccountPanel = new MyAccountPanel(mainCardPanel, cardLayout, employee);
+            MyAccountPanel.EmployeePanel myAccountPanel = new MyAccountPanel.EmployeePanel(mainCardPanel, cardLayout, admin);
 
             mainCardPanel.add(mainAdminPanel, "Admin Center");
-//            mainCardPanel.add(myAccountPanel, "My Account");
+            mainCardPanel.add(myAccountPanel, "My Account");
 
             cardLayout.show(mainCardPanel, "Admin Center");
 
             this.add(mainCardPanel, BorderLayout.CENTER);
 
             //header
-            header.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 15));
+            header.setLayout(new GridLayout(1,2)); // FlowLayout.LEADING, 10, 15
+
+            JPanel leftPanel = new JPanel();
+            leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT,10,15));
+            leftPanel.setOpaque(false);
 
             Dimension buttonSize = new Dimension(125,45);
 
@@ -261,33 +254,30 @@ public class MainMenuPanel extends JFrame {
                 cardLayout.show(mainCardPanel, "Admin Center");
             });
 
-            header.add(mainMenuBtn);
+            leftPanel.add(mainMenuBtn);
 
-            //Boş kısımlar
-
-            JPanel accountPanel = new JPanel();
-            accountPanel.setPreferredSize(new Dimension(760,45));
-            accountPanel.setBackground(Color.black);
-            accountPanel.setOpaque(false);
-            accountPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,0,0));
+            JPanel rightPanel = new JPanel();
+            rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,10,15));
+            rightPanel.setOpaque(false);
 
             //Hesap butonu
             JButton accountBtn = new JButton("Hesabım");
             accountBtn.setFocusable(false);
             accountBtn.setPreferredSize(new Dimension(90,45));
 
-//            accountBtn.addActionListener(e -> {
-//                // Geri dönmeden önce güncelle
-//                if (mainCardPanel.getComponent(0) instanceof MyAccountPanel myAccPanel) {
-//                    myAccPanel.refreshContent(mainCardPanel, cardLayout);
-//                }
-//
-//                cardLayout.show(mainCardPanel, "My Account");
-//            });
+            accountBtn.addActionListener(e -> {
+                // Geri dönmeden önce güncelle
+                if (mainCardPanel.getComponent(0) instanceof MyAccountPanel.EmployeePanel myAccPanel) {
+                    myAccPanel.refreshContent(mainCardPanel, cardLayout);
+                }
 
-            accountPanel.add(accountBtn);
+                cardLayout.show(mainCardPanel, "My Account");
+            });
 
-            header.add(accountPanel);
+            rightPanel.add(accountBtn);
+
+            header.add(leftPanel);
+            header.add(rightPanel);
 
             //-----------------
         }
