@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 public class Employee extends BaseUser{
 
     private String table = "employee";
-    private String userRole = "Çalışan";
+    private String userType = "Çalışan";
 
     @Override
     public String getTable() {
@@ -30,13 +30,18 @@ public class Employee extends BaseUser{
     }
 
     @Override
-    public void delUser() {
+    public void delThisUser() {
 
     }
 
     @Override
-    public ResultSet getApt(BaseUser user) {
+    public ResultSet getApt() {
         return null;
+    }
+
+    @Override
+    public void delApt(int aptID) {
+
     }
 
     @Override
@@ -90,6 +95,11 @@ public class Employee extends BaseUser{
     @Override
     public ResultSet getUsers() {
         return null;
+    }
+
+    @Override
+    public String getUserType() {
+        return userType;
     }
 
     @Override

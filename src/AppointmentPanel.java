@@ -1,7 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class AppointmentPanel {
 
@@ -107,7 +114,7 @@ public class AppointmentPanel {
         private static boolean appointmentExists(BaseUser customer) {
 
             try {
-                ResultSet resultSet = customer.getApt(customer);
+                ResultSet resultSet = customer.getApt();
 
                 if (resultSet.next()) {
                     return true;
@@ -122,7 +129,7 @@ public class AppointmentPanel {
         }
 
         private JPanel createCells(BaseUser customer) {
-            ResultSet resultSet = customer.getApt(customer);
+            ResultSet resultSet = customer.getApt();
             String clinic;
             String doctor;
             String date;
@@ -151,10 +158,43 @@ public class AppointmentPanel {
                     doctor = resultSet.getString("doctor");
                     date = resultSet.getString("apt_date");
 
+                    int aptID = resultSet.getInt("apt_id");
+
                     gbc.gridx = x;
                     gbc.gridy = y;
 
-                    panel.add(new CellPanel(clinic, doctor, date), gbc);
+                    JPanel cellPanel = new MainCenterPanel.CellPanel(clinic, doctor, date);
+
+                    cellPanel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            int choice = JOptionPane.showOptionDialog(null,
+                                    "Bu randevuyu silmek istediğinize emin misiniz?",
+                                    "Uyarı!",JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.INFORMATION_MESSAGE,null,null,0);
+
+                            if(choice == 0){
+                                customer.delApt(aptID);
+                                panel.remove(cellPanel);
+
+                                panel.revalidate();
+                                panel.repaint();
+                            }
+
+                        }
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                            cellPanel.setBackground(new Color(255, 116, 139));
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                            cellPanel.setBackground(new Color(177, 240, 247));
+                        }
+                    });
+
+                    panel.add(cellPanel, gbc);
 
                     x++;
                     totalCells++;
@@ -190,7 +230,6 @@ public class AppointmentPanel {
             }
         }
 
-        //Bu kısım bozulabilir!!
         private class CellPanel extends RoundedPanel {
             CellPanel(String clinic, String doctor, String date) {
 
@@ -228,6 +267,8 @@ public class AppointmentPanel {
 
         JButton goBackBtn;
         JButton saveBtn;
+
+        private final String[] doctors = Objects.requireNonNull(getDoctors()).toArray(new String[0]);
 
         CreateAptPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer){
 
@@ -268,9 +309,7 @@ public class AppointmentPanel {
             gbc.gridwidth = 1;
             tempPanel.add(new JLabel("Doktor :"), gbc);
 
-            String[] doktor = new String[] {"Ahmet","Mehmet","Nazif"};
-
-            JComboBox<String> doctorCBox = new JComboBox<>(doktor);
+            JComboBox<String> doctorCBox = new JComboBox<>(doctors);
 
             gbc.gridx = 1;
             gbc.gridy = 1;
@@ -360,5 +399,199 @@ public class AppointmentPanel {
             this.add(tempPanel, BorderLayout.NORTH);
         }
 
+        private static Set<String> getDoctors() {
+
+            try {
+                MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+                Class.forName("com.mysql.cj.jdbc.Driver");
+
+                Connection connection = DriverManager.getConnection(mysqlDBManager.getSqlUrl(),
+                        mysqlDBManager.getSqlUsername(),mysqlDBManager.getSqlPassword());
+
+                Statement statement = connection.createStatement();
+
+                String query = "SELECT fullName FROM employee " +
+                        "WHERE role = 'Doktor' ";
+
+                ResultSet resultSet = statement.executeQuery(query);
+
+                Set<String> doctorNames = new HashSet<>();
+
+                while (resultSet.next()) {
+
+                    doctorNames.add(resultSet.getString("fullName"));
+
+                }
+
+                return doctorNames;
+
+            }catch (Exception e){
+                JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                        "Bir Hata Oluştu(getDoctors)",JOptionPane.ERROR_MESSAGE);
+            }
+
+            return null;
+        }
+
     } //CreateAptPanel sonu
+
+    public static class DoctorAptPanel extends JPanel implements IPanel {
+
+        private final BaseUser doctor;
+
+        DoctorAptPanel (JPanel mainCardPanel, CardLayout cardLayout, BaseUser doctor) {
+            this.doctor = doctor; // Müşteri bilgisini sakla
+            initializePanel(mainCardPanel, cardLayout);
+        }
+
+
+        @Override
+        public void initializePanel(JPanel mainCardPanel, CardLayout cardLayout) {
+            this.setBackground(new Color(203, 220, 235));
+            this.setPreferredSize(new Dimension(100, 100));
+            refreshContent(mainCardPanel, cardLayout);
+        }
+
+        @Override
+        public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
+            this.removeAll(); // Mevcut tüm bileşenleri kaldır
+
+            if( MainCenterPanel.appointmentExists(doctor) ){
+
+                JPanel tempPanel = new JPanel();
+                tempPanel.setPreferredSize(new Dimension(100,350));
+                tempPanel.setOpaque(false); //Şeffaf
+                tempPanel.setBackground(Color.cyan);
+                tempPanel.setLayout(new BorderLayout());
+
+                JPanel cellPanel = createCells(doctor);
+
+                assert cellPanel != null;
+                tempPanel.add(cellPanel, BorderLayout.NORTH);
+
+                this.setLayout(new BorderLayout());
+                this.add(tempPanel, BorderLayout.NORTH);
+
+            }else {
+                JPanel tempPanel = new JPanel();
+                tempPanel.setPreferredSize(new Dimension(100,100));
+                tempPanel.setOpaque(false); //Şeffaf
+                tempPanel.setBackground(Color.cyan);
+                tempPanel.setLayout(new BorderLayout());
+
+                JLabel tempLabel = new JLabel("Randevunuz bulunmamaktadır.");
+                tempLabel.setFont(new Font("Times New Roman",Font.PLAIN,35));
+
+                tempPanel.add(tempLabel, BorderLayout.CENTER);
+
+                this.setLayout(new BorderLayout());
+                this.add(tempLabel, BorderLayout.NORTH);
+            }
+
+            this.revalidate(); // Bileşenleri yeniden düzenle
+            this.repaint();    // Paneli yeniden boya
+        }
+
+        private JPanel createCells(BaseUser doctor) {
+            ResultSet resultSet = doctor.getApt();
+            String customerName;
+            String date;
+
+            int x = 0;
+            int y = 0;
+            int totalCells = 0;
+
+            JPanel panel = new JPanel();
+            panel.setPreferredSize(new Dimension(300, 300));
+            panel.setBackground(Color.red);
+            panel.setOpaque(false);
+            panel.setLayout(new GridBagLayout());
+
+            GridBagConstraints gbc = new GridBagConstraints();
+
+            gbc.weightx = 1.0; // Yatayda boş alan paylaşımı
+            gbc.weighty = 1.0; // Dikeyde boş alan paylaşımı
+            gbc.fill = GridBagConstraints.BOTH; // Hem yatayda hem dikeyde genişle
+            gbc.insets = new Insets(10, 10, 10, 10); // Boşlukları sıfırla
+
+
+            try {
+
+                MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+                while (resultSet.next()) {
+
+                    int customerID = resultSet.getInt("cid");
+                    customerName = mysqlDBManager.getUsername("customer",customerID);
+                    date = resultSet.getString("apt_date");
+
+                    gbc.gridx = x;
+                    gbc.gridy = y;
+
+                    panel.add(new DoctorAptPanel.CellPanel(customerName, date), gbc);
+
+                    x++;
+                    totalCells++;
+
+                    // 3 sütundan sonra yeni satıra geç
+                    if (x == 3) {
+                        x = 0;
+                        y++;
+                    }
+                }
+
+                while (totalCells < 9) {
+                    gbc.gridx = x;
+                    gbc.gridy = y;
+
+                    JPanel temp = new JPanel();
+                    temp.setOpaque(false);
+                    panel.add(temp, gbc); // Boş hücre
+
+                    x++;
+                    totalCells++;
+
+                    if (x == 3) {
+                        x = 0;
+                        y++;
+                    }
+                }
+
+                return panel;
+
+            } catch (Exception exception) {
+                return null;
+            }
+        }
+
+        private class CellPanel extends RoundedPanel {
+            CellPanel(String customer, String date) {
+
+                // RoundedPanel yapılandırıcısını çağır
+                super(30, 30, Color.BLACK, 3);
+                // 30x30 yuvarlatma, siyah kenar, 3px kalınlık
+
+
+                this.setBackground(new Color(177, 240, 247));
+                this.setPreferredSize(new Dimension(15, 15));
+                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+                JLabel label1 = new JLabel(date);
+                JLabel label2 = new JLabel(customer);
+
+                Font font = new Font("Times New Roman", Font.PLAIN, 25);
+
+                label1.setFont(font);
+                label2.setFont(font);
+
+                label1.setAlignmentX(CENTER_ALIGNMENT);
+                label2.setAlignmentX(CENTER_ALIGNMENT);
+
+
+                this.add(label1);
+                this.add(label2);
+            }
+        }
+    }
 }

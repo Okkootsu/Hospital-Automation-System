@@ -6,7 +6,7 @@ import java.sql.Statement;
 
 public class Admin extends Employee {
 
-    private String userRole = "Admin";
+    private String userType = "Admin";
 
     @Override
     public void addEmployee(BaseUser employee, String userRole) {
@@ -38,7 +38,7 @@ public class Admin extends Employee {
     }
 
     @Override
-    public void delUser() {
+    public void delThisUser() {
         MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
         mysqlDBManager.deleteUser(getTable(), this.id);
@@ -74,4 +74,10 @@ public class Admin extends Employee {
 
         mysqlDBManager.deleteUser(getTable(), id);
     }
+
+    @Override
+    public String getUserType() {
+        return userType;
+    }
+
 }

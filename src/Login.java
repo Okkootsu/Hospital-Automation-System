@@ -52,6 +52,12 @@ public class Login implements ILoginDal{
                     resultSet.close();
                     return true;
                 }
+
+                if(user instanceof Employee){ // Çalışan kontrolü
+                    if( !(resultSet.getString("role").equals(user.getUserType())) ){ //uygun meslekte mi?
+                        return true;
+                    }
+                }
             }
             else {
                 resultSet.close();

@@ -105,4 +105,29 @@ public class MysqlDBManager {
         return null;
     }
 
+    public String getUsername(String table, int id) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection connection = DriverManager.getConnection(getSqlUrl(),getSqlUsername(),getSqlPassword());
+
+            Statement statement = connection.createStatement();
+
+            String query = "SELECT fullName FROM "+table+" " +
+                    "WHERE id = "+id;
+
+            ResultSet resultSet = statement.executeQuery(query);
+
+            resultSet.next();
+
+            return resultSet.getString("fullName");
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu (getInfo)",JOptionPane.ERROR_MESSAGE);
+        }
+
+        return "";
+    }
+
 }

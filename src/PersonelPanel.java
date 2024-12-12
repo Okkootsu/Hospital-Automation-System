@@ -161,6 +161,29 @@ public class PersonelPanel {
                     }
                 }
 
+                if(doctor){
+                    Employee employee = new Doctor();
+
+                    employee.password = passwordTextField.getText();
+
+                    try {
+
+                        employee.tc = Long.parseLong(tcTextField.getText());
+
+                        Login login = new Login();
+
+                        if(login.isCompleted(employee)){
+
+                            frame.dispose();
+
+                            MainMenuPanel mainMenuPanel = MainMenuPanel.getInstance(employee);
+                        }
+
+                    }catch (Exception exception){
+                        JOptionPane.showMessageDialog(null,"TC boş bırakılamaz" ,
+                                "Uyarı",JOptionPane.ERROR_MESSAGE);
+                    }
+                }
 
             }
 

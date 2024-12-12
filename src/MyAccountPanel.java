@@ -147,7 +147,7 @@ public class MyAccountPanel {
 
                 if(choice == 0){
 
-                    customer.delUser();
+                    customer.delThisUser();
 
                     JOptionPane.showMessageDialog(null,"Kullanıcı sistemden başarıyla silindi" ,
                             "Bilgilendirme",JOptionPane.INFORMATION_MESSAGE);
@@ -357,7 +357,7 @@ public class MyAccountPanel {
 
                 if(choice == 0){
 
-                    employee.delUser();
+                    employee.delThisUser();
 
                     JOptionPane.showMessageDialog(null,"Kullanıcı sistemden başarıyla silindi" ,
                             "Bilgilendirme",JOptionPane.INFORMATION_MESSAGE);

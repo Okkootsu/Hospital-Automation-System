@@ -35,7 +35,7 @@ public class Customer extends BaseUser{
     }
 
     @Override
-    public void delUser() {
+    public void delThisUser() {
         MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
         mysqlDBManager.deleteUser(getTable(), this.id);
@@ -112,7 +112,7 @@ public class Customer extends BaseUser{
     }
 
     @Override
-    public ResultSet getApt(BaseUser user) {
+    public ResultSet getApt() {
         try {
             MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
@@ -124,7 +124,7 @@ public class Customer extends BaseUser{
             Statement statement = connection.createStatement();
 
             String query = "SELECT * FROM appointment " +
-                    "WHERE cid = "+user.id;
+                    "WHERE cid = "+this.id;
 
             return statement.executeQuery(query);
 
@@ -135,4 +135,33 @@ public class Customer extends BaseUser{
 
         return null;
     }
+
+    @Override
+    public void delApt(int aptID) {
+        try {
+            MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection connection = DriverManager.getConnection(mysqlDBManager.getSqlUrl(),
+                    mysqlDBManager.getSqlUsername(),mysqlDBManager.getSqlPassword());
+
+            Statement statement = connection.createStatement();
+
+            String query = "DELETE FROM appointment " +
+                    "WHERE apt_id = "+aptID;
+
+            statement.execute(query);
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    @Override
+    public String getUserType() {
+        return userType;
+    }
+
 }
