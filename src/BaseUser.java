@@ -27,4 +27,8 @@ public abstract class BaseUser {
     public abstract ResultSet getUsers();
 
     public abstract String getUserType();
+
+    public abstract ResultSet getDiagnoses();
+
+    public abstract void createDiagnose(int aptID, int customerID, String diagnose, String date);
 }

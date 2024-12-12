@@ -84,7 +84,7 @@ public class MainMenuPanel extends JFrame {
             AppointmentPanel.CreateAptPanel createAptPanel = new AppointmentPanel.CreateAptPanel(mainCardPanel, cardLayout, customer);
 
             TestResultsPanel testResultsPanel = new TestResultsPanel(mainCardPanel, cardLayout, customer);
-            DiagnosesPanel diagnosesPanel = new DiagnosesPanel(mainCardPanel, cardLayout, customer);
+            DiagnosesPanel.CustomerPanel diagnosesPanel = new DiagnosesPanel.CustomerPanel(mainCardPanel, cardLayout, customer);
 
             MyAccountPanel.CustomerPanel myAccountPanel = new MyAccountPanel.CustomerPanel(mainCardPanel, cardLayout, customer);
 
@@ -145,7 +145,7 @@ public class MainMenuPanel extends JFrame {
 
             illnessesBtn.addActionListener(e -> {
                 // Geri dönmeden önce güncelle
-                if (mainCardPanel.getComponent(0) instanceof DiagnosesPanel diagnoses) {
+                if (mainCardPanel.getComponent(0) instanceof DiagnosesPanel.CustomerPanel diagnoses) {
                     diagnoses.refreshContent(mainCardPanel, cardLayout);
                 }
 
@@ -320,11 +320,15 @@ public class MainMenuPanel extends JFrame {
             AppointmentPanel.DoctorAptPanel mainDoctorPanel =
                     new AppointmentPanel.DoctorAptPanel(mainCardPanel, cardLayout, doctor);
 
+            DiagnosesPanel.DoctorPanel diagnosesPanel =
+                    new DiagnosesPanel.DoctorPanel(mainCardPanel, cardLayout, doctor);
+
             MyAccountPanel.EmployeePanel myAccountPanel =
                     new MyAccountPanel.EmployeePanel(mainCardPanel, cardLayout, doctor);
 
 
             mainCardPanel.add(mainDoctorPanel, "Doctor Center");
+            mainCardPanel.add(diagnosesPanel, "Diagnoses");
             mainCardPanel.add(myAccountPanel, "My Account");
 
             cardLayout.show(mainCardPanel, "Doctor Center");
@@ -340,6 +344,8 @@ public class MainMenuPanel extends JFrame {
 
             Dimension buttonSize = new Dimension(125,45);
 
+            //Header'ın solu
+
             JButton mainMenuBtn = new JButton("Ana Sayfa");
             mainMenuBtn.setFocusable(false);
             mainMenuBtn.setPreferredSize(buttonSize);
@@ -354,6 +360,24 @@ public class MainMenuPanel extends JFrame {
             });
 
             leftPanel.add(mainMenuBtn);
+
+
+            JButton diagnosesBtn = new JButton("Teşhisler");
+            diagnosesBtn.setFocusable(false);
+            diagnosesBtn.setPreferredSize(buttonSize);
+
+            diagnosesBtn.addActionListener(e -> {
+                // Geri dönmeden önce güncelle
+                if (mainCardPanel.getComponent(0) instanceof DiagnosesPanel.DoctorPanel doctorPanel) {
+                    doctorPanel.refreshContent(mainCardPanel, cardLayout);
+                }
+
+                cardLayout.show(mainCardPanel, "Diagnoses");
+            });
+
+            leftPanel.add(diagnosesBtn);
+
+            //Header'ın sağı
 
             JPanel rightPanel = new JPanel();
             rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT,10,15));

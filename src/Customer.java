@@ -164,4 +164,34 @@ public class Customer extends BaseUser{
         return userType;
     }
 
+    @Override
+    public ResultSet getDiagnoses() {
+        try {
+            MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection connection = DriverManager.getConnection(mysqlDBManager.getSqlUrl(),
+                    mysqlDBManager.getSqlUsername(),mysqlDBManager.getSqlPassword());
+
+            Statement statement = connection.createStatement();
+
+            String query = "SELECT * FROM diagnoses " +
+                    "WHERE cid = "+this.id;
+
+            return statement.executeQuery(query);
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu(getDiagnoses)",JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void createDiagnose(int aptID, int customerID, String diagnose, String date) {
+
+    }
+
 }

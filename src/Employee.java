@@ -103,6 +103,16 @@ public class Employee extends BaseUser{
     }
 
     @Override
+    public ResultSet getDiagnoses() {
+        return null;
+    }
+
+    @Override
+    public void createDiagnose(int aptID, int customerID, String diagnose, String date) {
+
+    }
+
+    @Override
     public String getUsername(BaseUser user) {
 
         try {

@@ -496,7 +496,6 @@ public class AppointmentPanel {
         private JPanel createCells(BaseUser doctor) {
             ResultSet resultSet = doctor.getApt();
             String customerName;
-            String date;
 
             int x = 0;
             int y = 0;
@@ -524,12 +523,39 @@ public class AppointmentPanel {
 
                     int customerID = resultSet.getInt("cid");
                     customerName = mysqlDBManager.getUsername("customer",customerID);
-                    date = resultSet.getString("apt_date");
+                    String date = resultSet.getString("apt_date");
+                    int aptID = resultSet.getInt("apt_id");
 
                     gbc.gridx = x;
                     gbc.gridy = y;
 
-                    panel.add(new DoctorAptPanel.CellPanel(customerName, date), gbc);
+                    JPanel cellPanel = new DoctorAptPanel.CellPanel(customerName, date);
+
+                    cellPanel.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            String diagnose = JOptionPane.showInputDialog("Teşhis: ");
+
+                            if (diagnose != null) {
+                                doctor.createDiagnose(aptID, customerID, diagnose, date);
+
+                                JOptionPane.showMessageDialog(null,"Teşhis Oluşturuldu" ,
+                                        "Bilgilendirme",JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                            cellPanel.setBackground(new Color(255, 116, 139));
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                            cellPanel.setBackground(new Color(177, 240, 247));
+                        }
+                    });
+
+                    panel.add(cellPanel, gbc);
 
                     x++;
                     totalCells++;

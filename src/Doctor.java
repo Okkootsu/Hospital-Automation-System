@@ -42,4 +42,51 @@ public class Doctor extends Employee {
 
         return null;
     }
+
+    @Override
+    public ResultSet getDiagnoses() {
+        try {
+            MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection connection = DriverManager.getConnection(mysqlDBManager.getSqlUrl(),
+                    mysqlDBManager.getSqlUsername(),mysqlDBManager.getSqlPassword());
+
+            Statement statement = connection.createStatement();
+
+            String query = "SELECT * FROM diagnoses " +
+                    "WHERE pid = "+this.id;
+
+            return statement.executeQuery(query);
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu(getDiagnoses)",JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
+    public void createDiagnose(int aptID, int customerID, String diagnose, String date) {
+        try {
+            MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection connection = DriverManager.getConnection(mysqlDBManager.getSqlUrl(),
+                    mysqlDBManager.getSqlUsername(),mysqlDBManager.getSqlPassword());
+
+            Statement statement = connection.createStatement();
+
+            String query = "INSERT INTO diagnoses(apt_id, pid, cid, diagnose, apt_date)" +
+                    "VALUES("+aptID+", "+this.id+" , "+customerID+" , '"+diagnose+"' , '"+date+"')";
+
+            statement.execute(query);
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

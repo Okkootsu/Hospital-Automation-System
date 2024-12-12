@@ -348,6 +348,22 @@ public class MyAccountPanel {
             accountPanel.add(id, gbc);
 
 
+            JLabel roleLabel = new JLabel("Meslek : ");
+            roleLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
+
+            gbc.gridx = 0;  gbc.gridy = 5;  gbc.gridwidth = 1;
+            accountPanel.add(roleLabel, gbc);
+
+
+            JLabel role = new JLabel();
+            role.setText(employee.getUserType());
+            role.setFont(new Font("Times New Roman",Font.PLAIN,30));
+
+            gbc.gridx = 1;  gbc.gridy = 5;  gbc.gridwidth = 2;
+            accountPanel.add(role, gbc);
+
+
+
             JButton delAccountBtn = new JButton("Hesabı Sil");
             delAccountBtn.setFocusable(false);
             delAccountBtn.addActionListener(e -> {
@@ -370,7 +386,7 @@ public class MyAccountPanel {
                 }
             });
 
-            gbc.gridx = 2;  gbc.gridy = 5;  gbc.gridwidth = 1;
+            gbc.gridx = 2;  gbc.gridy = 6;  gbc.gridwidth = 1;
             accountPanel.add(delAccountBtn, gbc);
 
 
@@ -392,7 +408,7 @@ public class MyAccountPanel {
 
             });
 
-            gbc.gridx = 1;  gbc.gridy = 5;  gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 6;  gbc.gridwidth = 1;
             accountPanel.add(updateAccountBtn, gbc);
 
 
@@ -410,7 +426,7 @@ public class MyAccountPanel {
                 }
             });
 
-            gbc.gridx = 0;  gbc.gridy = 5;  gbc.gridwidth = 1;
+            gbc.gridx = 0;  gbc.gridy = 6;  gbc.gridwidth = 1;
             accountPanel.add(logOffBtn, gbc);
 
 
