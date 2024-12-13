@@ -38,7 +38,7 @@ public class PersonelPanel {
     private class MainPanel extends JPanel implements ActionListener{
 
         JTextField tcTextField;
-        JTextField passwordTextField;
+        JPasswordField passwordTextField;
         JButton goBackButton;
         JButton loginButton;
         JButton hackBtn;
@@ -85,7 +85,8 @@ public class PersonelPanel {
             this.add(passwordLabel, gbc);
 
 
-            passwordTextField = new JTextField();
+            passwordTextField = new JPasswordField();
+            passwordTextField.setEchoChar('*');
 
             gbc.gridx = 2;
             gbc.gridy = 2;
@@ -93,12 +94,28 @@ public class PersonelPanel {
             this.add(passwordTextField, gbc);
 
 
+            //Şifreyi Göster
+            JCheckBox showPasswordChkBox = new JCheckBox("Şifreyi Göster");
+            showPasswordChkBox.setFocusable(false);
+            showPasswordChkBox.addActionListener(e -> {
+                if (showPasswordChkBox.isSelected()) {
+                    passwordTextField.setEchoChar((char) 0); // Şifreyi düz metin olarak göster
+                }
+                else {
+                    passwordTextField.setEchoChar('*');
+                }
+            });
+
+            gbc.gridx = 2;  gbc.gridy = 3;  gbc.gridwidth = 2;
+            this.add(showPasswordChkBox, gbc);
+
+
             hackBtn = new JButton("Hack");
             hackBtn.setFocusable(false);
             hackBtn.addActionListener(this);
 
             gbc.gridx = 3;
-            gbc.gridy = 3;
+            gbc.gridy = 4; //3'tü
             gbc.gridwidth = 1;
             this.add(hackBtn, gbc);
 
@@ -109,7 +126,7 @@ public class PersonelPanel {
             loginButton.addActionListener(this);
 
             gbc.gridx = 2;
-            gbc.gridy = 3;
+            gbc.gridy = 4;
             gbc.gridwidth = 1;
             this.add(loginButton, gbc);
 
@@ -120,14 +137,14 @@ public class PersonelPanel {
             goBackButton.addActionListener(e -> cardLayout.show(mainCardPanel, "Choice"));
 
             gbc.gridx = 1;
-            gbc.gridy = 3;
+            gbc.gridy = 4;
             gbc.gridwidth = 1;
             this.add(goBackButton, gbc);
 
 
             //Alt Boşluk
             gbc.gridx = 0;
-            gbc.gridy = 4;
+            gbc.gridy = 5;
             gbc.gridwidth = 1;
             this.add(new JPanel(), gbc);
         }
@@ -140,7 +157,8 @@ public class PersonelPanel {
                 if(admin){
                     Employee employee = new Admin();
 
-                    employee.password = passwordTextField.getText();
+                    char[] password = passwordTextField.getPassword();
+                    employee.password = String.valueOf(password);
 
                     try {
 
@@ -151,6 +169,9 @@ public class PersonelPanel {
                         if(login.isCompleted(employee)){
 
                             frame.dispose();
+
+                            // Şifre dizisini temizleme
+                            java.util.Arrays.fill(password, '\0');
 
                             MainMenuPanel mainMenuPanel = MainMenuPanel.getInstance(employee);
                         }
@@ -164,7 +185,8 @@ public class PersonelPanel {
                 if(doctor){
                     Employee employee = new Doctor();
 
-                    employee.password = passwordTextField.getText();
+                    char[] password = passwordTextField.getPassword();
+                    employee.password = String.valueOf(password);
 
                     try {
 
@@ -175,6 +197,9 @@ public class PersonelPanel {
                         if(login.isCompleted(employee)){
 
                             frame.dispose();
+
+                            // Şifre dizisini temizleme
+                            java.util.Arrays.fill(password, '\0');
 
                             MainMenuPanel mainMenuPanel = MainMenuPanel.getInstance(employee);
                         }

@@ -62,7 +62,7 @@ public class Admin extends Employee {
 
         }catch (Exception e){
             JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
-                    "Bir Hata Oluştu (getInfo)",JOptionPane.ERROR_MESSAGE);
+                    "Bir Hata Oluştu (getUsers)",JOptionPane.ERROR_MESSAGE);
         }
 
         return null;

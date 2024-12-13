@@ -34,7 +34,7 @@ public class HastaPanel {
         JButton goBackLoginButton;
         JTextField nameTextField;
         JTextField tcTextField;
-        JTextField passwordTextField;
+        JPasswordField passwordTextField;
         JButton hackButton; //otomatik giriş yapmak için
 
         MainPanel(){
@@ -92,11 +92,26 @@ public class HastaPanel {
             this.add(passwordLabel, gbc);
 
 
-            passwordTextField = new JTextField();
+            passwordTextField = new JPasswordField();
+            passwordTextField.setEchoChar('*');
                                                     //2 olmalı
             gbc.gridx = 2;  gbc.gridy = 2;  gbc.gridwidth = 3;
             this.add(passwordTextField, gbc);
 
+            //Şifreyi Göster
+            JCheckBox showPasswordChkBox = new JCheckBox("Şifreyi Göster");
+            showPasswordChkBox.setFocusable(false);
+            showPasswordChkBox.addActionListener(e -> {
+                if (showPasswordChkBox.isSelected()) {
+                    passwordTextField.setEchoChar((char) 0); // Şifreyi düz metin olarak göster
+                }
+                else {
+                    passwordTextField.setEchoChar('*');
+                }
+            });
+
+            gbc.gridx = 2;  gbc.gridy = 3;  gbc.gridwidth = 3;
+            this.add(showPasswordChkBox, gbc);
 
             //Fazlalık
             hackButton = new JButton();
@@ -105,7 +120,7 @@ public class HastaPanel {
             hackButton.addActionListener(this);
 
             gbc.gridx = 4;
-            gbc.gridy = 3;
+            gbc.gridy = 4; //3'tü
             gbc.gridwidth = 1;
             this.add(hackButton, gbc);
             //
@@ -115,7 +130,7 @@ public class HastaPanel {
             loginButton.setFocusable(false);
             loginButton.addActionListener(this);
 
-            gbc.gridx = 3;  gbc.gridy = 3;  gbc.gridwidth = 1;
+            gbc.gridx = 3;  gbc.gridy = 4;  gbc.gridwidth = 1;
             this.add(loginButton, gbc);
 
 
@@ -124,7 +139,7 @@ public class HastaPanel {
             registerButton.setFocusable(false);
             registerButton.addActionListener(this);
 
-            gbc.gridx = 2;  gbc.gridy = 3;  gbc.gridwidth = 1;
+            gbc.gridx = 2;  gbc.gridy = 4;  gbc.gridwidth = 1;
             this.add(registerButton, gbc);
 
 
@@ -133,11 +148,11 @@ public class HastaPanel {
             goBackLoginButton.setFocusable(false);
             goBackLoginButton.addActionListener(this);
 
-            gbc.gridx = 1;  gbc.gridy = 3;  gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 1;
             this.add(goBackLoginButton, gbc);
 
             //Alt Boşluk
-            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
+            gbc.gridx = 0;  gbc.gridy = 5;  gbc.gridwidth = 1;
             this.add(new JPanel(), gbc);
         }
 
@@ -163,7 +178,8 @@ public class HastaPanel {
 
                 Customer customer = new Customer();
 
-                customer.password = passwordTextField.getText();
+                char[] password = passwordTextField.getPassword();
+                customer.password = String.valueOf(password);
 
                 try {
 
@@ -174,6 +190,9 @@ public class HastaPanel {
                     if(login.isCompleted(customer)){
 
                         frame.dispose();
+
+                        // Şifre dizisini temizleme
+                        java.util.Arrays.fill(password, '\0');
 
                         MainMenuPanel mainMenuPanel = MainMenuPanel.getInstance(customer);
 

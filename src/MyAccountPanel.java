@@ -1,9 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MyAccountPanel {
 
-    public static class CustomerPanel extends JPanel implements IPanel{
+    public static class CustomerPanel extends JPanel implements IPanel, ActionListener {
         private final BaseUser customer;
 
         CustomerPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer){
@@ -17,6 +19,11 @@ public class MyAccountPanel {
             this.setPreferredSize(new Dimension(100, 100));
             refreshContent(mainCardPanel, cardLayout);
         }
+
+        JButton showPasswordBtn;
+        JLabel password;
+        StringBuilder censoredPassword;
+        int count = 0;
 
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
@@ -113,13 +120,38 @@ public class MyAccountPanel {
 
 
 
-            JLabel password = new JLabel();
-            password.setText(customer.password);
+            password = new JLabel();
+
+            //Şifreyi gizle
+            censoredPassword = new StringBuilder();
+            int len = customer.password.length();
+            for(int i=0; i < len; i++){
+                censoredPassword.append('*');
+            }
+            password.setText(censoredPassword.toString());
+            //
+
             password.setFont(new Font("Times New Roman",Font.PLAIN,30));
 
-            gbc.gridx = 1;  gbc.gridy = 3;  gbc.gridwidth = 2;
+            gbc.gridx = 1;  gbc.gridy = 3;  gbc.gridwidth = 1; //2 idi normalde
             accountPanel.add(password, gbc);
 
+
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setBackground(Color.black);
+            buttonPanel.setOpaque(false);
+            buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,7));
+
+            showPasswordBtn = new JButton("Şifreyi Göster");
+            showPasswordBtn.setFocusable(false);
+            showPasswordBtn.addActionListener(this);
+            showPasswordBtn.setPreferredSize(new Dimension(115,50));
+
+            buttonPanel.setPreferredSize(new Dimension(showPasswordBtn.getPreferredSize()));
+            buttonPanel.add(showPasswordBtn);
+
+            gbc.gridx = 2;  gbc.gridy = 3;  gbc.gridwidth = 1;
+            accountPanel.add(buttonPanel, gbc);
 
 
             JLabel idLabel = new JLabel("ID : ");
@@ -177,6 +209,11 @@ public class MyAccountPanel {
                 else {
                     customer.update("password",newPass);
                     customer.password = newPass;
+
+                    // Hesap panelini güncelle
+                    if (mainCardPanel.getComponent(4) instanceof CustomerPanel myAccountPanel) {
+                        myAccountPanel.refreshContent(mainCardPanel, cardLayout);
+                    }
                 }
             });
 
@@ -210,9 +247,41 @@ public class MyAccountPanel {
             this.revalidate(); // Bileşenleri yeniden düzenle
             this.repaint();    // Paneli yeniden boya
         }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == showPasswordBtn){
+
+                count++;
+
+                if(count % 2 == 0){
+                    password.setText(censoredPassword.toString());
+
+                    password.revalidate();
+                    password.repaint();
+
+                    showPasswordBtn.setText("Şifreyi Göster");
+
+                    showPasswordBtn.revalidate();
+                    showPasswordBtn.repaint();
+                }
+
+                else{
+                    password.setText(customer.password);
+
+                    password.revalidate();
+                    password.repaint();
+
+                    showPasswordBtn.setText("Şifreyi Gizle");
+
+                    showPasswordBtn.revalidate();
+                    showPasswordBtn.repaint();
+                }
+            }
+        }
     }
 
-    public static class EmployeePanel extends JPanel implements IPanel{
+    public static class EmployeePanel extends JPanel implements IPanel, ActionListener{
 
         private final BaseUser employee;
 
@@ -227,6 +296,11 @@ public class MyAccountPanel {
             this.setPreferredSize(new Dimension(100, 100));
             refreshContent(mainCardPanel, cardLayout);
         }
+
+        JButton showPasswordBtn;
+        JLabel password;
+        StringBuilder censoredPassword;
+        int count = 0;
 
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
@@ -323,12 +397,38 @@ public class MyAccountPanel {
 
 
 
-            JLabel password = new JLabel();
-            password.setText(employee.password);
+            password = new JLabel();
+
+            //Şifreyi gizle
+            censoredPassword = new StringBuilder();
+            int len = employee.password.length();
+            for(int i=0; i < len; i++){
+                censoredPassword.append('*');
+            }
+            password.setText(censoredPassword.toString());
+            //
+
             password.setFont(new Font("Times New Roman",Font.PLAIN,30));
 
-            gbc.gridx = 1;  gbc.gridy = 3;  gbc.gridwidth = 2;
+            gbc.gridx = 1;  gbc.gridy = 3;  gbc.gridwidth = 1; //2 idi normalde
             accountPanel.add(password, gbc);
+
+
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.setBackground(Color.black);
+            buttonPanel.setOpaque(false);
+            buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,7));
+
+            showPasswordBtn = new JButton("Şifreyi Göster");
+            showPasswordBtn.setFocusable(false);
+            showPasswordBtn.addActionListener(this);
+            showPasswordBtn.setPreferredSize(new Dimension(115,42));
+
+            buttonPanel.setPreferredSize(new Dimension(showPasswordBtn.getPreferredSize()));
+            buttonPanel.add(showPasswordBtn);
+
+            gbc.gridx = 2;  gbc.gridy = 3;  gbc.gridwidth = 1;
+            accountPanel.add(buttonPanel, gbc);
 
 
 
@@ -404,6 +504,8 @@ public class MyAccountPanel {
                 else {
                     employee.update("password",newPass);
                     employee.password = newPass;
+
+                    this.refreshContent(mainCardPanel, cardLayout); // Güncel içeriği yükle
                 }
 
             });
@@ -437,6 +539,38 @@ public class MyAccountPanel {
 
             this.revalidate(); // Bileşenleri yeniden düzenle
             this.repaint();    // Paneli yeniden boya
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == showPasswordBtn){
+
+                count++;
+
+                if(count % 2 == 0){
+                    password.setText(censoredPassword.toString());
+
+                    password.revalidate();
+                    password.repaint();
+
+                    showPasswordBtn.setText("Şifreyi Göster");
+
+                    showPasswordBtn.revalidate();
+                    showPasswordBtn.repaint();
+                }
+
+                else{
+                    password.setText(employee.password);
+
+                    password.revalidate();
+                    password.repaint();
+
+                    showPasswordBtn.setText("Şifreyi Gizle");
+
+                    showPasswordBtn.revalidate();
+                    showPasswordBtn.repaint();
+                }
+            }
         }
     }
 

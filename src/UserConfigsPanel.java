@@ -227,6 +227,11 @@ public class UserConfigsPanel extends JPanel implements IPanel{
                     JOptionPane.showMessageDialog(this,"Kullanıcı sisteme eklendi" ,
                             "İşlem Başarılı",JOptionPane.INFORMATION_MESSAGE);
 
+                    // Kullanıcı silme panelini güncelle
+                    if (mainCardPanel.getComponent(1) instanceof UserDelPanel userDelPanel) {
+                        userDelPanel.refreshContent(mainCardPanel, cardLayout);
+                    }
+
                 }catch (Exception exception){
                     JOptionPane.showMessageDialog(null,"Hata kodu: "+exception.getMessage() ,
                             "Bir Hata Oluştu!",JOptionPane.ERROR_MESSAGE);
@@ -277,15 +282,20 @@ public class UserConfigsPanel extends JPanel implements IPanel{
             eastPanel.setPreferredSize(new Dimension(200,100));
             eastPanel.setOpaque(false);
 
+            JPanel northPanel = new JPanel();
+            northPanel.setPreferredSize(new Dimension(200,25));
+            northPanel.setOpaque(false);
+
             tempPanel.add(westPanel, BorderLayout.WEST);
             tempPanel.add(eastPanel, BorderLayout.EAST);
+            tempPanel.add(northPanel, BorderLayout.NORTH);
 
             JPanel empList = new RoundedPanel(30,30,Color.BLACK,3);
             empList.setBackground(new Color(245, 240, 205));
-            empList.setPreferredSize(new Dimension(100,100));
+            empList.setPreferredSize(new Dimension(100,150));
             empList.setLayout(new GridBagLayout());
 
-            Font font = new Font("Times New Roman",Font.PLAIN,35);
+            Font font = new Font("Times New Roman",Font.PLAIN,30);
 
             GridBagConstraints gbc = new GridBagConstraints();
 
@@ -304,20 +314,39 @@ public class UserConfigsPanel extends JPanel implements IPanel{
 
                     int userID = resultSet.getInt("id");
 
-                    JLabel userLabel = new JLabel(resultSet.getString("fullName") + "          " +
-                            resultSet.getString("role"));
-                    userLabel.setFont(font);
-                    userLabel.addMouseListener(new MouseAdapter() {
+                    JPanel panel = new JPanel();
+                    panel.setLayout(new GridLayout(1,2));
+                    panel.setBackground(new Color(245, 240, 205));
+                    panel.setOpaque(false); //rengi gözüküyor
+
+                    JPanel leftPanel = new JPanel();
+                    leftPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+                    leftPanel.setOpaque(false); //şeffaf
+
+                    JPanel rightPanel = new JPanel();
+                    rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+                    rightPanel.setOpaque(false); //şeffaf
+
+                    JLabel nameLabel = new JLabel(resultSet.getString("fullName"));
+                    JLabel roleLabel =  new JLabel("(" +resultSet.getString("role")+ ")" );
+
+                    nameLabel.setFont(font);
+                    roleLabel.setFont(font);
+
+                    leftPanel.add(nameLabel);
+                    rightPanel.add(roleLabel);
+
+                    panel.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseEntered(MouseEvent e) {
-                            userLabel.setBackground(new Color(255, 232, 147));
-                            userLabel.setOpaque(true);
+                            panel.setBackground(new Color(255, 232, 147));
+                            panel.setOpaque(true);
                         }
 
                         @Override
                         public void mouseExited(MouseEvent e) {
-                            userLabel.setBackground(new Color(245, 240, 205));
-                            userLabel.setOpaque(true);
+                            panel.setBackground(new Color(245, 240, 205));
+                            panel.setOpaque(true);
                         }
 
                         @Override
@@ -330,7 +359,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
 
                             if(choice == 0){
                                 admin.delUser(userID);
-                                empList.remove(userLabel);
+                                empList.remove(panel);
 
                                 empList.revalidate();
                                 empList.repaint();
@@ -339,7 +368,11 @@ public class UserConfigsPanel extends JPanel implements IPanel{
 
                     });
 
-                    empList.add(userLabel, gbc);
+                    panel.add(leftPanel);
+                    panel.add(rightPanel);
+
+
+                    empList.add(panel, gbc);
 
                     gbc.gridy++;
                 }
