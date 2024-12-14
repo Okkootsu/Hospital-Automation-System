@@ -349,5 +349,76 @@ public class DiagnosesPanel {
                 this.add(label3);
             }
         }
+
+//        private class CellPanel extends RoundedPanel {
+//            CellPanel(JPanel northPanel, JPanel[] southPanels) {
+//
+//                // RoundedPanel yapılandırıcısını çağır
+//                super(10, 10, Color.BLACK, 3);
+//                // 30x30 yuvarlatma, siyah kenar, 3px kalınlık
+//
+//                this.setLayout(new BorderLayout());
+//
+//                this.add(northPanel, BorderLayout.NORTH);
+//
+//                JPanel southSide = new JPanel();
+//                southSide.setLayout(new GridBagLayout());
+//
+//                GridBagConstraints gbc = new GridBagConstraints();
+//
+//                gbc.weightx = 1.0; // Yatayda boş alan paylaşımı
+//                gbc.weighty = 1.0; // Dikeyde boş alan paylaşımı
+//                gbc.fill = GridBagConstraints.BOTH; // Hem yatayda hem dikeyde genişle
+//                gbc.insets = new Insets(10, 10, 10, 10); // Boşlukları sıfırla
+//
+//                gbc.gridx = 0;
+//                gbc.gridy = 0;
+//
+//                for (JPanel panel : southPanels){
+//                    southSide.add(panel, gbc);
+//                    gbc.gridy++;
+//                }
+//
+//                this.add(southSide, BorderLayout.CENTER);
+//            }
+//        }
+//
+//        private class NorthPanel extends JPanel {
+//            NorthPanel (String customer) {
+//                this.setBackground(new Color(177, 240, 247));
+//                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+//
+//                JLabel customerLabel = new JLabel(customer);
+//
+//                Font font = new Font("Times New Roman", Font.PLAIN, 25);
+//
+//                customerLabel.setFont(font);
+//
+//                customerLabel.setAlignmentX(CENTER_ALIGNMENT);
+//
+//                this.add(customerLabel);
+//            }
+//        }
+//
+//        private class SouthPanel extends JPanel {
+//            SouthPanel(String diagnose, String date) {
+//                this.setBackground(new Color(177, 240, 247));
+//                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+//
+//                JLabel diagnoseLabel = new JLabel(diagnose);
+//                JLabel dateLabel = new JLabel(date);
+//
+//                Font font = new Font("Times New Roman", Font.PLAIN, 25);
+//
+//                diagnoseLabel.setFont(font);
+//                dateLabel.setFont(font);
+//
+//                diagnoseLabel.setAlignmentX(CENTER_ALIGNMENT);
+//                dateLabel.setAlignmentX(CENTER_ALIGNMENT);
+//
+//                this.add(diagnoseLabel);
+//                this.add(dateLabel);
+//            }
+//        }
     }
 }

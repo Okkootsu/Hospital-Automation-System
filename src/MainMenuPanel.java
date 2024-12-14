@@ -64,8 +64,8 @@ public class MainMenuPanel extends JFrame {
 
             header.setPreferredSize(new Dimension(100,75));
             westContainer.setPreferredSize(new Dimension(150,100)); //100
-            eastContainer.setPreferredSize(new Dimension(150,100)); //100
-            footer.setPreferredSize(new Dimension(100,75));
+            eastContainer.setPreferredSize(new Dimension(150,100)); //100->150(*)
+            footer.setPreferredSize(new Dimension(100,35));
 
 
             this.add(header, BorderLayout.NORTH);

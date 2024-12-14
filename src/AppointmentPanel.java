@@ -36,18 +36,21 @@ public class AppointmentPanel {
             if (appointmentExists(customer)) {
 
                 tempPanel = new JPanel();
-                tempPanel.setPreferredSize(new Dimension(300, 325));
+                tempPanel.setPreferredSize(new Dimension(300, 325)); //325 height
                 tempPanel.setBackground(Color.lightGray);
                 tempPanel.setLayout(new BorderLayout());
                 tempPanel.setOpaque(false);
 
                 //Hücreleri oluşturma
                 JPanel cellPanel = createCells(customer);
+                assert cellPanel != null;
+                cellPanel.setPreferredSize(new Dimension(100,375));
 
                 JPanel buttonPanel = new JPanel();
-                buttonPanel.setLayout(new FlowLayout(FlowLayout.LEADING)); // Butonu ortala
+                buttonPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
                 buttonPanel.setOpaque(false);
                 buttonPanel.setBackground(Color.DARK_GRAY);
+                buttonPanel.setPreferredSize(new Dimension(100,150));
 
                 JButton createAptBtn = new JButton("Randevu Oluştur");
                 createAptBtn.setFocusable(false);
@@ -56,12 +59,46 @@ public class AppointmentPanel {
 
                 buttonPanel.add(createAptBtn);
 
-                assert cellPanel != null;
-                tempPanel.add(cellPanel, BorderLayout.CENTER);
-                tempPanel.add(buttonPanel, BorderLayout.SOUTH);
+                JPanel southPanel = new JPanel();
+                southPanel.setPreferredSize(new Dimension(100,45));
+                southPanel.setBackground(Color.cyan);
+                southPanel.setOpaque(false);
+
+
+                tempPanel.add(cellPanel, BorderLayout.NORTH); //Center
+                tempPanel.add(buttonPanel, BorderLayout.CENTER); //South
+                tempPanel.add(southPanel, BorderLayout.SOUTH);
+
+
+                String message = "<html> <b>Bilgilendirme :</b>  <br> " +
+                        "Randevuların üstüne tıklayarak randevularınızı iptal edebilirsiniz. </html>";
+
+                JLabel infoMessage = new JLabel(message);
+                infoMessage.setFont(new Font("Times New Roman",Font.PLAIN,25));
+
+
+                JPanel infoPanel = new RoundedPanel(30,30,Color.BLACK,3);
+                infoPanel.setBackground(new Color(255, 232, 147));
+                infoPanel.setPreferredSize(new Dimension(300,150));
+
+                infoMessage.setPreferredSize(new Dimension(280, 140)); // İçerik boyutuna uygun bir alan ayarla
+                infoPanel.add(Box.createHorizontalGlue()); // Yanlardan boşluk ekle
+                infoPanel.add(infoMessage);
+                infoPanel.add(Box.createVerticalGlue()); // Yukarıdan ve aşağıdan boşluk ekle
+
+
+                JPanel messagePanel = new JPanel();
+                messagePanel.setBackground(Color.red);
+                messagePanel.setOpaque(false);
+                messagePanel.setPreferredSize(new Dimension(100,160));
+                messagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+
+                messagePanel.add(infoPanel);
+
 
                 this.setLayout(new BorderLayout());
-                this.add(tempPanel, BorderLayout.NORTH);
+                this.add(tempPanel, BorderLayout.CENTER);
+                this.add(messagePanel, BorderLayout.SOUTH);
             } else {
                 tempPanel = new JPanel();
                 tempPanel.setPreferredSize(new Dimension(140, 140));
@@ -467,11 +504,40 @@ public class AppointmentPanel {
 
                 JPanel cellPanel = createCells(doctor);
 
+
+                String message = "<html> <b>Bilgilendirme :</b>  <br> " +
+                        "Randevuların üstüne tıklayarak hastalarınıza teşhis koyabilirsiniz. </html>";
+
+                JLabel infoMessage = new JLabel(message);
+                infoMessage.setFont(new Font("Times New Roman",Font.PLAIN,25));
+
+
+                JPanel infoPanel = new RoundedPanel(30,30,Color.BLACK,3);
+                infoPanel.setBackground(new Color(255, 232, 147));
+                infoPanel.setPreferredSize(new Dimension(300,150));
+
+
+                infoMessage.setPreferredSize(new Dimension(280, 140)); // İçerik boyutuna uygun bir alan ayarla
+                infoPanel.add(Box.createHorizontalGlue()); // Yanlardan boşluk ekle
+                infoPanel.add(infoMessage);
+                infoPanel.add(Box.createVerticalGlue()); // Yukarıdan ve aşağıdan boşluk ekle
+
+
+                JPanel messagePanel = new JPanel();
+                messagePanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+                messagePanel.setBackground(Color.red);
+                messagePanel.setPreferredSize(new Dimension(100,160));
+                messagePanel.setOpaque(false);
+
+                messagePanel.add(infoPanel);
+
+
                 assert cellPanel != null;
-                tempPanel.add(cellPanel, BorderLayout.NORTH);
+                tempPanel.add(cellPanel, BorderLayout.CENTER);
 
                 this.setLayout(new BorderLayout());
-                this.add(tempPanel, BorderLayout.NORTH);
+                this.add(tempPanel, BorderLayout.CENTER);
+                this.add(messagePanel, BorderLayout.SOUTH);
 
             }else {
                 JPanel tempPanel = new JPanel();
