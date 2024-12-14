@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.sql.ResultSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class DiagnosesPanel {
 
@@ -94,7 +96,6 @@ public class DiagnosesPanel {
                     diagnose = resultSet.getString("diagnose");
                     date = resultSet.getString("apt_date");
 
-//                    int aptID = resultSet.getInt("apt_id");
 
                     gbc.gridx = x;
                     gbc.gridy = y;
@@ -243,13 +244,10 @@ public class DiagnosesPanel {
 
         private JPanel createCells(BaseUser doctor) {
             ResultSet resultSet = doctor.getDiagnoses();
-            String customerName;
-            String diagnose;
-            String date;
 
-            int x = 0;
-            int y = 0;
-            int totalCells = 0;
+            Map<Integer, String> patientDiagnoses = new LinkedHashMap<>();
+            Map<Integer, String> patientNames = new LinkedHashMap<>();
+
 
             JPanel panel = new JPanel();
             panel.setPreferredSize(new Dimension(300, 300));
@@ -271,29 +269,48 @@ public class DiagnosesPanel {
 
                 while (resultSet.next()) {
                     int customerID = resultSet.getInt("cid");
-                    customerName = mysqlDBManager.getUsername("customer",customerID);
-                    diagnose = resultSet.getString("diagnose");
-                    date = resultSet.getString("apt_date");
+                    String customerName = mysqlDBManager.getUsername("customer", customerID);
+                    String diagnose = resultSet.getString("diagnose");
+                    String date = "(" + resultSet.getString("apt_date") + ")";
 
-//                    int aptID = resultSet.getInt("apt_id");
+                    String combinedDiagnose = diagnose + " " + date;
 
-                    gbc.gridx = x;
-                    gbc.gridy = y;
-
-                    JPanel cellPanel = new DoctorPanel.CellPanel(customerName, diagnose, date);
-
-                    panel.add(cellPanel, gbc);
-
-                    x++;
-                    totalCells++;
-
-                    // 3 sütundan sonra yeni satıra geç
-                    if (x == 3) {
-                        x = 0;
-                        y++;
+                    //Eğer hasta zaten varsa, o kişiye ekleme yap
+                    if (patientDiagnoses.containsKey(customerID)) {
+                        patientDiagnoses.put(customerID, patientDiagnoses.get(customerID) + ", " + combinedDiagnose);
+                    } else {
+                        patientDiagnoses.put(customerID, combinedDiagnose);
+                        patientNames.put(customerID, customerName);
                     }
                 }
 
+                    int x = 0;
+                    int y = 0;
+                    int totalCells = 0;
+
+                    for (Integer customerID : patientDiagnoses.keySet()) {
+                        gbc.gridx = x;
+                        gbc.gridy = y;
+
+                        String customerName = patientNames.get(customerID);
+                        String diagnose = patientDiagnoses.get(customerID);
+
+                        JPanel cellPanel = new DoctorPanel.CellPanel(customerName, diagnose);
+
+                        panel.add(cellPanel, gbc);
+
+
+                        x++;
+                        totalCells++;
+
+                        // 3 sütundan sonra yeni satıra geç
+                        if (x == 3) {
+                            x = 0;
+                            y++;
+                        }
+                    }
+
+                //Boş hücrelerin eklenmesi -> tasarım deseni
                 while (totalCells < 6) {
                     gbc.gridx = x;
                     gbc.gridy = y;
@@ -319,7 +336,7 @@ public class DiagnosesPanel {
         }
 
         private class CellPanel extends RoundedPanel {
-            CellPanel(String customer, String diagnose, String date) {
+            CellPanel(String customer, String diagnose) {
 
                 // RoundedPanel yapılandırıcısını çağır
                 super(10, 10, Color.BLACK, 3);
@@ -327,98 +344,26 @@ public class DiagnosesPanel {
 
 
                 this.setBackground(new Color(177, 240, 247));
-//                this.setPreferredSize(new Dimension(15, 15));
                 this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
                 JLabel label1 = new JLabel(customer);
                 JLabel label2 = new JLabel(diagnose);
-                JLabel label3 = new JLabel("("+date+")");
+
 
                 Font font = new Font("Times New Roman", Font.PLAIN, 25);
 
                 label1.setFont(font);
                 label2.setFont(font);
-                label3.setFont(font);
+
 
                 label1.setAlignmentX(CENTER_ALIGNMENT);
                 label2.setAlignmentX(CENTER_ALIGNMENT);
-                label3.setAlignmentX(CENTER_ALIGNMENT);
+
 
                 this.add(label1);
                 this.add(label2);
-                this.add(label3);
+
             }
         }
-
-//        private class CellPanel extends RoundedPanel {
-//            CellPanel(JPanel northPanel, JPanel[] southPanels) {
-//
-//                // RoundedPanel yapılandırıcısını çağır
-//                super(10, 10, Color.BLACK, 3);
-//                // 30x30 yuvarlatma, siyah kenar, 3px kalınlık
-//
-//                this.setLayout(new BorderLayout());
-//
-//                this.add(northPanel, BorderLayout.NORTH);
-//
-//                JPanel southSide = new JPanel();
-//                southSide.setLayout(new GridBagLayout());
-//
-//                GridBagConstraints gbc = new GridBagConstraints();
-//
-//                gbc.weightx = 1.0; // Yatayda boş alan paylaşımı
-//                gbc.weighty = 1.0; // Dikeyde boş alan paylaşımı
-//                gbc.fill = GridBagConstraints.BOTH; // Hem yatayda hem dikeyde genişle
-//                gbc.insets = new Insets(10, 10, 10, 10); // Boşlukları sıfırla
-//
-//                gbc.gridx = 0;
-//                gbc.gridy = 0;
-//
-//                for (JPanel panel : southPanels){
-//                    southSide.add(panel, gbc);
-//                    gbc.gridy++;
-//                }
-//
-//                this.add(southSide, BorderLayout.CENTER);
-//            }
-//        }
-//
-//        private class NorthPanel extends JPanel {
-//            NorthPanel (String customer) {
-//                this.setBackground(new Color(177, 240, 247));
-//                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//
-//                JLabel customerLabel = new JLabel(customer);
-//
-//                Font font = new Font("Times New Roman", Font.PLAIN, 25);
-//
-//                customerLabel.setFont(font);
-//
-//                customerLabel.setAlignmentX(CENTER_ALIGNMENT);
-//
-//                this.add(customerLabel);
-//            }
-//        }
-//
-//        private class SouthPanel extends JPanel {
-//            SouthPanel(String diagnose, String date) {
-//                this.setBackground(new Color(177, 240, 247));
-//                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//
-//                JLabel diagnoseLabel = new JLabel(diagnose);
-//                JLabel dateLabel = new JLabel(date);
-//
-//                Font font = new Font("Times New Roman", Font.PLAIN, 25);
-//
-//                diagnoseLabel.setFont(font);
-//                dateLabel.setFont(font);
-//
-//                diagnoseLabel.setAlignmentX(CENTER_ALIGNMENT);
-//                dateLabel.setAlignmentX(CENTER_ALIGNMENT);
-//
-//                this.add(diagnoseLabel);
-//                this.add(dateLabel);
-//            }
-//        }
     }
 }

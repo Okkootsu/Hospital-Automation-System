@@ -607,6 +607,7 @@ public class AppointmentPanel {
 
                                 JOptionPane.showMessageDialog(null,"Teşhis Oluşturuldu" ,
                                         "Bilgilendirme",JOptionPane.INFORMATION_MESSAGE);
+
                             }
                         }
 

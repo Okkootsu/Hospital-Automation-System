@@ -6,7 +6,7 @@ public class MainMenuPanel extends JFrame {
     //Singleton tasarım deseni
 
     private static MainMenuPanel instance;
-    private BaseUser user;
+    private final BaseUser user;
     JPanel mainPanel;
 
     private MainMenuPanel(BaseUser user){
@@ -403,6 +403,4 @@ public class MainMenuPanel extends JFrame {
             header.add(rightPanel);
         }
     }
-
-
 }
