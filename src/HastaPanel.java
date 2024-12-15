@@ -56,22 +56,6 @@ public class HastaPanel {
             this.add(new JPanel(), gbc);
 
 
-//            JLabel nameLabel = new JLabel();
-//            nameLabel.setText("Ad Soyad:");
-//
-//
-//            gbc.gridx = 1;
-//            gbc.gridy = 1;
-//            this.add(nameLabel, gbc);
-//
-//            nameTextField = new JTextField();
-
-
-//            gbc.gridx = 2;
-//            gbc.gridwidth = 3; //2 genişlikte
-//            this.add(nameTextField, gbc);
-
-
             JLabel tcLabel = new JLabel();
             tcLabel.setText("TC Kimlik No:");
 

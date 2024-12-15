@@ -6,9 +6,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
 
 public class AppointmentPanel {
 
@@ -370,26 +370,30 @@ public class AppointmentPanel {
             dateTempPanel.setLayout(new GridLayout(1,3));
             dateTempPanel.setOpaque(false);
 
-            String[] days = new String[30];
-            for (int i = 1; i <= 30; i++){
-                days[i-1] = String.valueOf(i);
+
+            JComboBox<Integer> dayCBox = new JComboBox<>();
+            JComboBox<Integer> monthCBox = new JComboBox<>();
+            JComboBox<Integer> yearCBox = new JComboBox<>();
+
+            for (int year = 2024; year <= 2025; year++) {
+                yearCBox.addItem(year);
             }
 
-            String[] months = new String[12];
-            for (int i = 1; i <= 12; i++){
-                months[i-1] = String.valueOf(i);
+            for (int month = 1; month <= 12; month++) {
+                monthCBox.addItem(month);
             }
 
-            String[] years = new String[] {"2024","2025","2026"};
+            for (int day = 1; day <= 31; day++) {
+                dayCBox.addItem(day);
+            }
 
-            JComboBox<String> dayCBox = new JComboBox<>(days);
+            monthCBox.addItemListener(e -> updateDays(dayCBox, monthCBox, yearCBox));
+            yearCBox.addItemListener(e -> updateDays(dayCBox, monthCBox, yearCBox));
+
             dateTempPanel.add(dayCBox);
-
-            JComboBox<String> monthCBox = new JComboBox<>(months);
             dateTempPanel.add(monthCBox);
-
-            JComboBox<String> yearCBox = new JComboBox<>(years);
             dateTempPanel.add(yearCBox);
+
             //------------------
 
             goBackBtn = new JButton("Geri Dön");
@@ -419,7 +423,7 @@ public class AppointmentPanel {
                 String month = Objects.requireNonNull(monthCBox.getSelectedItem()).toString();
                 String year = Objects.requireNonNull(yearCBox.getSelectedItem()).toString();
 
-                String date = day+"-"+month+"-"+year;
+                String date = day+"/"+month+"/"+year;
 
                 customer.createApt(customer.id, clinic, doctor, date);
 
@@ -434,6 +438,21 @@ public class AppointmentPanel {
 
             this.setLayout(new BorderLayout());
             this.add(tempPanel, BorderLayout.NORTH);
+        }
+
+        private static void updateDays(JComboBox<Integer> dayCBox, JComboBox<Integer> monthCBox, JComboBox<Integer> yearCBox) {
+
+            int selectedMonth = (int) monthCBox.getSelectedItem();
+            int selectedYear = (int) yearCBox.getSelectedItem();
+
+
+            int daysInMonth = LocalDate.of(selectedYear, selectedMonth, 1).lengthOfMonth();
+
+
+            dayCBox.removeAllItems();
+            for (int day = 1; day <= daysInMonth; day++) {
+                dayCBox.addItem(day);
+            }
         }
 
         private static Set<String> getDoctors() {
