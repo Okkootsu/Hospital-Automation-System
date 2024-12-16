@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 
 public class Login implements ILoginDal{
 
+    // İşlem bitince haber ver
     public boolean isCompleted(BaseUser user){
 
         if(isIncorrect(user)){
@@ -13,13 +14,14 @@ public class Login implements ILoginDal{
             return false;
         }
         else {
-            user.id = user.getId(user);
+            user.id = user.getId(user); //Giriş yapan kullanıcının bilgilerini ekle
             user.username = user.getUsername(user);
             return true;
         }
 
     }
 
+    // Giriş için kontroller
     @Override
     public boolean isIncorrect(BaseUser user) {
 
@@ -36,7 +38,7 @@ public class Login implements ILoginDal{
             return true;
         }
 
-        try{
+        try{    // Veri tabanı kontrolleri
             MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
             ResultSet resultSet = mysqlDBManager.getInfo(user.getTable(), user);

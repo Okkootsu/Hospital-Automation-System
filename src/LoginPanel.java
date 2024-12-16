@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// Uygulama için Ana giriş yapma paneli
+
 public class LoginPanel implements ActionListener {
 
     JFrame frame;
@@ -62,12 +64,12 @@ public class LoginPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == hastaButon){
+        if(e.getSource() == hastaButon){ // Hasta Girişe yönlendir
             frame.dispose();
             new HastaPanel();
         }
 
-        if(e.getSource() == personelButon){
+        if(e.getSource() == personelButon){ // Personel Girişe yönlendir
             frame.dispose();
             new PersonelPanel();
         }

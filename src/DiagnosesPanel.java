@@ -4,14 +4,17 @@ import java.sql.ResultSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+// Teşhis bilgilerini gösteren GUI paneli
+
 public class DiagnosesPanel {
 
+    //Hasta için panel
     public static class CustomerPanel extends JPanel implements IPanel {
 
         private final BaseUser customer;
 
         CustomerPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer){
-            this.customer = customer;
+            this.customer = customer; //Kullanıcı bilgisini sakla
             initializePanel(mainCardPanel, cardLayout);
         }
 
@@ -22,10 +25,12 @@ public class DiagnosesPanel {
             refreshContent(mainCardPanel, cardLayout);
         }
 
+        //Paneli güncelle
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
             this.removeAll();
 
+            // Teşhis var mı? Varsa bu paneli göster
             if ( DiagnosesPanel.DoctorPanel.diagnosesExists(customer) ) {
 
                 JPanel tempPanel = new JPanel();
@@ -34,7 +39,7 @@ public class DiagnosesPanel {
                 tempPanel.setPreferredSize(new Dimension(100,350));
                 tempPanel.setLayout(new BorderLayout());
 
-                JPanel cells = createCells(customer);
+                JPanel cells = createCells(customer); //Teşhisleri sistemden al ve ekrana ekle
 
                 assert cells != null;
                 tempPanel.add(cells, BorderLayout.NORTH);
@@ -42,7 +47,7 @@ public class DiagnosesPanel {
                 this.setLayout(new BorderLayout());
                 this.add(tempPanel, BorderLayout.NORTH);
 
-            }else {
+            }else { // Teşhis yoksa bu paneli göster
                 JPanel tempPanel = new JPanel();
                 tempPanel.setPreferredSize(new Dimension(140, 140));
                 tempPanel.setBackground(Color.lightGray);
@@ -62,8 +67,9 @@ public class DiagnosesPanel {
             this.repaint();    // Paneli yeniden boya
         }
 
+        // Teşhisleri sistemden al ve her teşhis için hücre oluştur
         private JPanel createCells(BaseUser customer) {
-            ResultSet resultSet = customer.getDiagnoses();
+            ResultSet resultSet = customer.getDiagnoses(); //Teşhis verilerini al
             String doctorName;
             String diagnose;
             String date;
@@ -90,7 +96,7 @@ public class DiagnosesPanel {
 
                 MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
-                while (resultSet.next()) {
+                while (resultSet.next()) { // Her teşhis için döngüde gez ve gerekli bilgileri al
                     int doctorID = resultSet.getInt("pid");
                     doctorName = mysqlDBManager.getUsername("employee", doctorID);
                     diagnose = resultSet.getString("diagnose");
@@ -114,6 +120,7 @@ public class DiagnosesPanel {
                     }
                 }
 
+                //Tasarımı düzeltmek için boş hücreler ekle
                 while (totalCells < 6) {
                     gbc.gridx = x;
                     gbc.gridy = y;
@@ -138,6 +145,7 @@ public class DiagnosesPanel {
             }
         }
 
+        // Teşhis bilgileri için bir panel oluştur
         private class CellPanel extends RoundedPanel {
             CellPanel(String doctor, String diagnose, String date) {
 
@@ -148,7 +156,7 @@ public class DiagnosesPanel {
 
                 this.setBackground(new Color(177, 240, 247));
 //                this.setPreferredSize(new Dimension(15, 15));
-                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); //Yazıları birbirine yaklaştır
 
                 JLabel label1 = new JLabel("Dr. "+doctor);
                 JLabel label2 = new JLabel(diagnose);
@@ -160,7 +168,7 @@ public class DiagnosesPanel {
                 label2.setFont(font);
                 label3.setFont(font);
 
-                label1.setAlignmentX(CENTER_ALIGNMENT);
+                label1.setAlignmentX(CENTER_ALIGNMENT); //Yazıları birbirine yaklaştır
                 label2.setAlignmentX(CENTER_ALIGNMENT);
                 label3.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -171,12 +179,13 @@ public class DiagnosesPanel {
         }
     } //CustomerPanel Sonu
 
+    // Teşhisler için doktor paneli
     public static class DoctorPanel extends JPanel implements IPanel {
 
         private final BaseUser doctor;
 
         DoctorPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser doctor) {
-            this.doctor = doctor;
+            this.doctor = doctor; // Kullanıcı bilgisini sakla
             initializePanel(mainCardPanel, cardLayout);
         }
 
@@ -187,10 +196,12 @@ public class DiagnosesPanel {
             refreshContent(mainCardPanel, cardLayout);
         }
 
+        //Verileri güncelle
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
             this.removeAll();
 
+            //Teşhis varsa bu paneli göster
             if( diagnosesExists(doctor) ){
 
                 JPanel tempPanel = new JPanel();
@@ -199,14 +210,14 @@ public class DiagnosesPanel {
                 tempPanel.setPreferredSize(new Dimension(100,350));
                 tempPanel.setLayout(new BorderLayout());
 
-                JPanel cells = createCells(doctor);
+                JPanel cells = createCells(doctor); // Varolan teşhisleri oluştur
 
                 assert cells != null;
                 tempPanel.add(cells, BorderLayout.NORTH);
 
                 this.setLayout(new BorderLayout());
                 this.add(tempPanel, BorderLayout.NORTH);
-            }else {
+            }else { // Teşhis yoksa bu paneli göster
                 JPanel tempPanel = new JPanel();
                 tempPanel.setPreferredSize(new Dimension(140, 140));
                 tempPanel.setBackground(Color.lightGray);
@@ -226,6 +237,7 @@ public class DiagnosesPanel {
             this.repaint();    // Paneli yeniden boya
         }
 
+        //Teşhisler var mı yok mu onu kontrol et
         private static boolean diagnosesExists(BaseUser doctor) {
             try {
                 ResultSet resultSet = doctor.getDiagnoses();
@@ -242,6 +254,7 @@ public class DiagnosesPanel {
             return false;
         }
 
+        //Her teşhis için bir hücre oluştur ve panele ekle
         private JPanel createCells(BaseUser doctor) {
             ResultSet resultSet = doctor.getDiagnoses();
 
@@ -335,6 +348,7 @@ public class DiagnosesPanel {
             }
         }
 
+        // Her teşhis için hücre oluştur
         private class CellPanel extends RoundedPanel {
             CellPanel(String customer, String diagnose) {
 
@@ -344,7 +358,7 @@ public class DiagnosesPanel {
 
 
                 this.setBackground(new Color(177, 240, 247));
-                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); //Yazıları ortala
 
                 JLabel label1 = new JLabel(customer);
                 JLabel label2 = new JLabel(diagnose);
@@ -356,7 +370,7 @@ public class DiagnosesPanel {
                 label2.setFont(font);
 
 
-                label1.setAlignmentX(CENTER_ALIGNMENT);
+                label1.setAlignmentX(CENTER_ALIGNMENT); //Yazıları ortala
                 label2.setAlignmentX(CENTER_ALIGNMENT);
 
 

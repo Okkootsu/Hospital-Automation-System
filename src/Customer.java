@@ -4,16 +4,27 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+//Hasta ve onun gerçekleştirebildiği işlemler
+
 public class Customer extends BaseUser{
 
+    //Customer field'ları
     private String table = "customer";
     private String userType = "Hasta";
 
+    //Veritabanı için hangi tabloya yazılacağı bilgisini buradan alıyor
     @Override
     public String getTable() {
         return table;
     }
 
+    //Kullanıcının rolünü al
+    @Override
+    public String getUserType() {
+        return userType;
+    }
+
+    //Kullanıcı id'sini doğrudan veri tabanından al
     @Override
     public int getId(BaseUser user) {
 
@@ -34,13 +45,7 @@ public class Customer extends BaseUser{
         return -1;
     }
 
-    @Override
-    public void delThisUser() {
-        MysqlDBManager mysqlDBManager = new MysqlDBManager();
-
-        mysqlDBManager.deleteUser(getTable(), this.id);
-    }
-
+    //Kullanıcı ismini doğrudan veri tabanından al
     @Override
     public String getUsername(BaseUser user) {
 
@@ -61,6 +66,29 @@ public class Customer extends BaseUser{
         return "";
     }
 
+    //Bu kullanıcıyı sil
+    @Override
+    public void delThisUser() {
+        MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+        mysqlDBManager.deleteUser(getTable(), this.id);
+    }
+
+    //Kullanıcı bilgilerini günceller
+    @Override
+    public void update(String update, String newValue) {
+        MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+        mysqlDBManager.updateInfo(getTable(), this, update, newValue);
+    }
+
+    //Ana sayfa'da gösterilecek paneli al (Kendi panelini göster)
+    @Override
+    public JPanel getPanel() {
+        return new MainMenuPanel.MainPanel(this);
+    }
+
+    //Randevu oluştur veri tabanına bu bilgileri yükle
     @Override
     public void createApt(int id, String clinic, String doctor, String date) {
         try {
@@ -84,33 +112,7 @@ public class Customer extends BaseUser{
         }
     }
 
-    @Override
-    public void addEmployee(BaseUser employee, String userRole) {
-
-    }
-
-    @Override
-    public void update(String update, String newValue) {
-        MysqlDBManager mysqlDBManager = new MysqlDBManager();
-
-        mysqlDBManager.updateInfo(getTable(), this, update, newValue);
-    }
-
-    @Override
-    public JPanel getPanel() {
-        return new MainMenuPanel.MainPanel(this);
-    }
-
-    @Override
-    public void updateInfo() {
-
-    }
-
-    @Override
-    public ResultSet getUsers() {
-        return null;
-    }
-
+    //Varolan randevuları sistemden al
     @Override
     public ResultSet getApt() {
         try {
@@ -123,6 +125,7 @@ public class Customer extends BaseUser{
 
             Statement statement = connection.createStatement();
 
+            //Mysql'de kullanılacak kod parçası
             String query = "SELECT * FROM appointment " +
                     "WHERE cid = "+this.id;
 
@@ -136,6 +139,7 @@ public class Customer extends BaseUser{
         return null;
     }
 
+    //Randevu sil
     @Override
     public void delApt(int aptID) {
         try {
@@ -148,6 +152,7 @@ public class Customer extends BaseUser{
 
             Statement statement = connection.createStatement();
 
+            //Mysql'de kullanılacak kod parçası
             String query = "DELETE FROM appointment " +
                     "WHERE apt_id = "+aptID;
 
@@ -159,11 +164,7 @@ public class Customer extends BaseUser{
         }
     }
 
-    @Override
-    public String getUserType() {
-        return userType;
-    }
-
+    //Bu kullanıcı için konulan teşhisleri al
     @Override
     public ResultSet getDiagnoses() {
         try {
@@ -176,6 +177,7 @@ public class Customer extends BaseUser{
 
             Statement statement = connection.createStatement();
 
+            //Mysql'de kullanılacak kod parçası
             String query = "SELECT * FROM diagnoses " +
                     "WHERE cid = "+this.id;
 
@@ -189,6 +191,25 @@ public class Customer extends BaseUser{
         return null;
     }
 
+    //Yetkisiz metod
+    @Override
+    public void addEmployee(BaseUser employee, String userRole) {
+
+    }
+
+    //Yetkisiz metod
+    @Override
+    public void updateInfo() {
+
+    }
+
+    //Yetkisiz metod
+    @Override
+    public ResultSet getUsers() {
+        return null;
+    }
+
+    //Yetkisiz metod
     @Override
     public void createDiagnose(int aptID, int customerID, String diagnose, String date) {
 

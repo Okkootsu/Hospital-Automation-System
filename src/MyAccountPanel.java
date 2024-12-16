@@ -154,20 +154,20 @@ public class MyAccountPanel {
             accountPanel.add(buttonPanel, gbc);
 
 
-            JLabel idLabel = new JLabel("ID : ");
-            idLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
+//            JLabel idLabel = new JLabel("ID : ");
+//            idLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
+//
+//            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
+//            accountPanel.add(idLabel, gbc);
 
-            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
-            accountPanel.add(idLabel, gbc);
 
 
-
-            JLabel id = new JLabel();
-            id.setText(String.valueOf(customer.id));
-            id.setFont(new Font("Times New Roman",Font.PLAIN,30));
-
-            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 2;
-            accountPanel.add(id, gbc);
+//            JLabel id = new JLabel();
+//            id.setText(String.valueOf(customer.id));
+//            id.setFont(new Font("Times New Roman",Font.PLAIN,30));
+//
+//            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 2;
+//            accountPanel.add(id, gbc);
 
 
             JButton delAccountBtn = new JButton("Hesabı Sil");
@@ -192,7 +192,7 @@ public class MyAccountPanel {
                 }
             });
 
-            gbc.gridx = 2;  gbc.gridy = 5;  gbc.gridwidth = 1;
+            gbc.gridx = 2;  gbc.gridy = 4;  gbc.gridwidth = 1;
             accountPanel.add(delAccountBtn, gbc);
 
 
@@ -210,14 +210,16 @@ public class MyAccountPanel {
                     customer.update("password",newPass);
                     customer.password = newPass;
 
-                    // Hesap panelini güncelle
-                    if (mainCardPanel.getComponent(4) instanceof CustomerPanel myAccountPanel) {
-                        myAccountPanel.refreshContent(mainCardPanel, cardLayout);
-                    }
+//                    // Hesap panelini güncelle
+//                    if (mainCardPanel.getComponent(4) instanceof CustomerPanel myAccountPanel) {
+//                        myAccountPanel.refreshContent(mainCardPanel, cardLayout);
+//                    }
+
+                    this.refreshContent(mainCardPanel, cardLayout); // Güncel içeriği yükle
                 }
             });
 
-            gbc.gridx = 1;  gbc.gridy = 5;  gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 1;
             accountPanel.add(updateAccountBtn, gbc);
 
 
@@ -235,7 +237,7 @@ public class MyAccountPanel {
                 }
             });
 
-            gbc.gridx = 0;  gbc.gridy = 5;  gbc.gridwidth = 1;
+            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
             accountPanel.add(logOffBtn, gbc);
 
 
@@ -432,26 +434,26 @@ public class MyAccountPanel {
 
 
 
-            JLabel idLabel = new JLabel("ID : ");
-            idLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
-
-            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
-            accountPanel.add(idLabel, gbc);
-
-
-
-            JLabel id = new JLabel();
-            id.setText(String.valueOf(employee.id));
-            id.setFont(new Font("Times New Roman",Font.PLAIN,30));
-
-            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 2;
-            accountPanel.add(id, gbc);
+//            JLabel idLabel = new JLabel("ID : ");
+//            idLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
+//
+//            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
+//            accountPanel.add(idLabel, gbc);
+//
+//
+//
+//            JLabel id = new JLabel();
+//            id.setText(String.valueOf(employee.id));
+//            id.setFont(new Font("Times New Roman",Font.PLAIN,30));
+//
+//            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 2;
+//            accountPanel.add(id, gbc);
 
 
             JLabel roleLabel = new JLabel("Meslek : ");
             roleLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
 
-            gbc.gridx = 0;  gbc.gridy = 5;  gbc.gridwidth = 1;
+            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
             accountPanel.add(roleLabel, gbc);
 
 
@@ -459,7 +461,7 @@ public class MyAccountPanel {
             role.setText(employee.getUserType());
             role.setFont(new Font("Times New Roman",Font.PLAIN,30));
 
-            gbc.gridx = 1;  gbc.gridy = 5;  gbc.gridwidth = 2;
+            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 2;
             accountPanel.add(role, gbc);
 
 
@@ -486,7 +488,7 @@ public class MyAccountPanel {
                 }
             });
 
-            gbc.gridx = 2;  gbc.gridy = 6;  gbc.gridwidth = 1;
+            gbc.gridx = 2;  gbc.gridy = 5;  gbc.gridwidth = 1;
             accountPanel.add(delAccountBtn, gbc);
 
 
@@ -510,7 +512,7 @@ public class MyAccountPanel {
 
             });
 
-            gbc.gridx = 1;  gbc.gridy = 6;  gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 5;  gbc.gridwidth = 1;
             accountPanel.add(updateAccountBtn, gbc);
 
 
@@ -528,7 +530,7 @@ public class MyAccountPanel {
                 }
             });
 
-            gbc.gridx = 0;  gbc.gridy = 6;  gbc.gridwidth = 1;
+            gbc.gridx = 0;  gbc.gridy = 5;  gbc.gridwidth = 1;
             accountPanel.add(logOffBtn, gbc);
 
 

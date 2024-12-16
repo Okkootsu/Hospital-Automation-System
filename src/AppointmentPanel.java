@@ -7,16 +7,19 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.*;
+
+//Randevular için GUI paneli -> Doktor veya hasta erişebilir
 
 public class AppointmentPanel {
 
+    //Hasta için GUI paneli
     public static class MainCenterPanel extends JPanel implements IPanel {
 
         private JPanel tempPanel;
         private final BaseUser customer;
 
+        //Kullanıcı bilgisini saklamak için constructor
         MainCenterPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer) {
             this.customer = customer; // Müşteri bilgisini sakla
             initializePanel(mainCardPanel, cardLayout);
@@ -29,10 +32,12 @@ public class AppointmentPanel {
             refreshContent(mainCardPanel, cardLayout);
         }
 
+        //Panel bilgilerini güncelle
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
             this.removeAll(); // Mevcut tüm bileşenleri kaldır
 
+            // Randevu varsa bu kısmı göster
             if (appointmentExists(customer)) {
 
                 tempPanel = new JPanel();
@@ -65,8 +70,8 @@ public class AppointmentPanel {
                 southPanel.setOpaque(false);
 
 
-                tempPanel.add(cellPanel, BorderLayout.NORTH); //Center
-                tempPanel.add(buttonPanel, BorderLayout.CENTER); //South
+                tempPanel.add(cellPanel, BorderLayout.NORTH);
+                tempPanel.add(buttonPanel, BorderLayout.CENTER);
                 tempPanel.add(southPanel, BorderLayout.SOUTH);
 
 
@@ -99,7 +104,7 @@ public class AppointmentPanel {
                 this.setLayout(new BorderLayout());
                 this.add(tempPanel, BorderLayout.CENTER);
                 this.add(messagePanel, BorderLayout.SOUTH);
-            } else {
+            } else {    //Randevu yoksa bu paneli göster
                 tempPanel = new JPanel();
                 tempPanel.setPreferredSize(new Dimension(140, 140));
                 tempPanel.setBackground(Color.cyan);
@@ -127,6 +132,7 @@ public class AppointmentPanel {
                     gbc.gridwidth = 1;
                     tempPanel.add(new JLabel(""), gbc);
                 }
+                //Butonun büyüklüğünü ayarlamak için boş hücreler oluşturuldu
 
 
                 JButton createAptBtn = new JButton("Randevu Oluştur");
@@ -148,6 +154,7 @@ public class AppointmentPanel {
             this.repaint();    // Paneli yeniden boya
         } // void refreshContent sonu
 
+        //Randevu var mı diye kontrol et -> user'ın ilgili metodunu çağır
         private static boolean appointmentExists(BaseUser customer) {
 
             try {
@@ -165,15 +172,16 @@ public class AppointmentPanel {
             return false;
         }
 
+        //Kullanıcının sahip olduğu tüm randevuların gösterileceği paneli oluştur
         private JPanel createCells(BaseUser customer) {
-            ResultSet resultSet = customer.getApt();
+            ResultSet resultSet = customer.getApt(); //Kullanıcının randevu bilgilerini al
             String clinic;
             String doctor;
             String date;
 
             int x = 0;
             int y = 0;
-            int totalCells = 0;
+            int totalCells = 0; //Tasarımı daha düzenli yapmak için 6'lı hücre tablosu kullanmak için her hücrenin sayısını tutuyoruz
 
             JPanel panel = new JPanel();
             panel.setPreferredSize(new Dimension(300, 300));
@@ -190,7 +198,7 @@ public class AppointmentPanel {
 
 
             try {
-                while (resultSet.next()) {
+                while (resultSet.next()) {  //Her bir randevu arasında geziniyoruz ve gerekli bilgileri çekiyoruz
                     clinic = resultSet.getString("clinic");
                     doctor = resultSet.getString("doctor");
                     date = resultSet.getString("apt_date");
@@ -200,11 +208,11 @@ public class AppointmentPanel {
                     gbc.gridx = x;
                     gbc.gridy = y;
 
-                    JPanel cellPanel = new MainCenterPanel.CellPanel(clinic, doctor, date);
+                    JPanel cellPanel = new MainCenterPanel.CellPanel(clinic, doctor, date); //Tek randevu için hücreyi oluştur
 
                     cellPanel.addMouseListener(new MouseAdapter() {
                         @Override
-                        public void mouseClicked(MouseEvent e) {
+                        public void mouseClicked(MouseEvent e) {    //Tıklandığında randevuyu silme işlemi
                             int choice = JOptionPane.showOptionDialog(null,
                                     "Bu randevuyu silmek istediğinize emin misiniz?",
                                     "Uyarı!",JOptionPane.YES_NO_OPTION,
@@ -221,12 +229,12 @@ public class AppointmentPanel {
                         }
 
                         @Override
-                        public void mouseEntered(MouseEvent e) {
+                        public void mouseEntered(MouseEvent e) {    //Tasarımsal olarak hücreye fare getirilince rengi değişiyor
                             cellPanel.setBackground(new Color(255, 116, 139));
                         }
 
                         @Override
-                        public void mouseExited(MouseEvent e) {
+                        public void mouseExited(MouseEvent e) { //Tasarımsal olarak hücreye fare getirilince rengi değişiyor
                             cellPanel.setBackground(new Color(177, 240, 247));
                         }
                     });
@@ -235,14 +243,14 @@ public class AppointmentPanel {
 
                     x++;
                     totalCells++;
-
+                    //Tasarımsal düzenlemeler
                     // 3 sütundan sonra yeni satıra geç
                     if (x == 3) {
                         x = 0;
                         y++;
                     }
                 }
-
+                //6 randevudan az varsa geri kalan kısımları boşluk yaparak 6'lı GridBagLayout oluşturuyoruz
                 while (totalCells < 6) {
                     gbc.gridx = x;
                     gbc.gridy = y;
@@ -267,6 +275,7 @@ public class AppointmentPanel {
             }
         }
 
+        //Her bir randevu için bir hücre/panel oluştur
         private class CellPanel extends RoundedPanel {
             CellPanel(String clinic, String doctor, String date) {
 
@@ -277,7 +286,7 @@ public class AppointmentPanel {
 
                 this.setBackground(new Color(177, 240, 247));
                 this.setPreferredSize(new Dimension(15, 15));
-                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); //Yazıların birbirine yakın olmasını sağla
 
                 JLabel label1 = new JLabel(date);
                 JLabel label2 = new JLabel(clinic);
@@ -289,7 +298,7 @@ public class AppointmentPanel {
                 label2.setFont(font);
                 label3.setFont(font);
 
-                label1.setAlignmentX(CENTER_ALIGNMENT);
+                label1.setAlignmentX(CENTER_ALIGNMENT); //Yazıların birbirine yakın olmasını sağla
                 label2.setAlignmentX(CENTER_ALIGNMENT);
                 label3.setAlignmentX(CENTER_ALIGNMENT);
 
@@ -300,11 +309,13 @@ public class AppointmentPanel {
         }
     } //MainCenterPanel sonu
 
+    //Randevu oluşturma sayfası
     public static class CreateAptPanel extends JPanel {
 
         JButton goBackBtn;
         JButton saveBtn;
 
+        //Sistemde bulunan doktorlar
         private final String[] doctors = Objects.requireNonNull(getDoctors()).toArray(new String[0]);
 
         CreateAptPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer){
@@ -346,6 +357,7 @@ public class AppointmentPanel {
             gbc.gridwidth = 1;
             tempPanel.add(new JLabel("Doktor :"), gbc);
 
+            //Doktor seçme Combobox'ı
             JComboBox<String> doctorCBox = new JComboBox<>(doctors);
 
             gbc.gridx = 1;
@@ -375,6 +387,7 @@ public class AppointmentPanel {
             JComboBox<Integer> monthCBox = new JComboBox<>();
             JComboBox<Integer> yearCBox = new JComboBox<>();
 
+            //Tarih kısmını ayarlamak için geçici tarihler oluşturuyoruz
             for (int year = 2024; year <= 2025; year++) {
                 yearCBox.addItem(year);
             }
@@ -413,6 +426,7 @@ public class AppointmentPanel {
             gbc.gridwidth = 1;
             tempPanel.add(goBackBtn, gbc);
 
+            //Seçilen bilgilere göre randevu oluştur
             saveBtn = new JButton("Kaydet");
             saveBtn.setFocusable(false);
             saveBtn.addActionListener(e -> {
@@ -440,6 +454,7 @@ public class AppointmentPanel {
             this.add(tempPanel, BorderLayout.NORTH);
         }
 
+        //Tarihi uygun hale getir
         private static void updateDays(JComboBox<Integer> dayCBox, JComboBox<Integer> monthCBox, JComboBox<Integer> yearCBox) {
 
             int selectedMonth = (int) monthCBox.getSelectedItem();
@@ -455,6 +470,7 @@ public class AppointmentPanel {
             }
         }
 
+        //Sistemdeki doktorları al
         private static Set<String> getDoctors() {
 
             try {
@@ -492,6 +508,7 @@ public class AppointmentPanel {
 
     } //CreateAptPanel sonu
 
+    //RAndevu sayfası için Doktor paneli
     public static class DoctorAptPanel extends JPanel implements IPanel {
 
         private final BaseUser doctor;
@@ -509,10 +526,12 @@ public class AppointmentPanel {
             refreshContent(mainCardPanel, cardLayout);
         }
 
+        //Sayfayı güncelle
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
             this.removeAll(); // Mevcut tüm bileşenleri kaldır
 
+            //Doktorun sahip olduğu randevuları kontrol et, varsa bu paneli göster
             if( MainCenterPanel.appointmentExists(doctor) ){
 
                 JPanel tempPanel = new JPanel();
@@ -523,7 +542,7 @@ public class AppointmentPanel {
 
                 JPanel cellPanel = createCells(doctor);
 
-
+                //Bilgilendirme paneli ve onun yerleştirme ayarlamaları
                 String message = "<html> <b>Bilgilendirme :</b>  <br> " +
                         "Randevuların üstüne tıklayarak hastalarınıza teşhis koyabilirsiniz. </html>";
 
@@ -549,8 +568,9 @@ public class AppointmentPanel {
                 messagePanel.setOpaque(false);
 
                 messagePanel.add(infoPanel);
+                //
 
-
+                //null olma ihtimaline karşı önlem
                 assert cellPanel != null;
                 tempPanel.add(cellPanel, BorderLayout.CENTER);
 
@@ -558,7 +578,7 @@ public class AppointmentPanel {
                 this.add(tempPanel, BorderLayout.CENTER);
                 this.add(messagePanel, BorderLayout.SOUTH);
 
-            }else {
+            }else { //Randevu yoksa bu paneli göster
                 JPanel tempPanel = new JPanel();
                 tempPanel.setPreferredSize(new Dimension(100,100));
                 tempPanel.setOpaque(false); //Şeffaf
@@ -578,6 +598,7 @@ public class AppointmentPanel {
             this.repaint();    // Paneli yeniden boya
         }
 
+        //Doktorun her randevusunu gösterecek paneli oluştur
         private JPanel createCells(BaseUser doctor) {
             ResultSet resultSet = doctor.getApt();
             String customerName;
@@ -604,7 +625,7 @@ public class AppointmentPanel {
 
                 MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
-                while (resultSet.next()) {
+                while (resultSet.next()) {  //Her randevu bilgisi arasında dolaş, gerekli bilgileri al
 
                     int customerID = resultSet.getInt("cid");
                     customerName = mysqlDBManager.getUsername("customer",customerID);
@@ -618,7 +639,7 @@ public class AppointmentPanel {
 
                     cellPanel.addMouseListener(new MouseAdapter() {
                         @Override
-                        public void mouseClicked(MouseEvent e) {
+                        public void mouseClicked(MouseEvent e) { //Teşhis koyma eventi
                             String diagnose = JOptionPane.showInputDialog("Teşhis: ");
 
                             if (diagnose != null) {
@@ -627,11 +648,18 @@ public class AppointmentPanel {
                                 JOptionPane.showMessageDialog(null,"Teşhis Oluşturuldu" ,
                                         "Bilgilendirme",JOptionPane.INFORMATION_MESSAGE);
 
+                                doctor.delApt(aptID);
+
+
+                                panel.remove(cellPanel);
+
+                                panel.revalidate();
+                                panel.repaint();
                             }
                         }
 
                         @Override
-                        public void mouseEntered(MouseEvent e) {
+                        public void mouseEntered(MouseEvent e) { //Panelin üstüne gelince arkaplanı kırmızı yap
                             cellPanel.setBackground(new Color(255, 116, 139));
                         }
 
@@ -653,6 +681,7 @@ public class AppointmentPanel {
                     }
                 }
 
+                //Tasarımı düzeltmek için boş hücreler ekle
                 while (totalCells < 9) {
                     gbc.gridx = x;
                     gbc.gridy = y;
@@ -677,6 +706,7 @@ public class AppointmentPanel {
             }
         }
 
+        //Tek bir randevu hücresi oluştur
         private class CellPanel extends RoundedPanel {
             CellPanel(String customer, String date) {
 
@@ -687,7 +717,7 @@ public class AppointmentPanel {
 
                 this.setBackground(new Color(177, 240, 247));
                 this.setPreferredSize(new Dimension(15, 15));
-                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+                this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); //Yazılar birbirine yakın olsun
 
                 JLabel label1 = new JLabel(date);
                 JLabel label2 = new JLabel(customer);
@@ -697,7 +727,7 @@ public class AppointmentPanel {
                 label1.setFont(font);
                 label2.setFont(font);
 
-                label1.setAlignmentX(CENTER_ALIGNMENT);
+                label1.setAlignmentX(CENTER_ALIGNMENT); //Yazılar birbirine yakın olsun
                 label2.setAlignmentX(CENTER_ALIGNMENT);
 
 

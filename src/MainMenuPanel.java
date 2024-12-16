@@ -83,14 +83,14 @@ public class MainMenuPanel extends JFrame {
             AppointmentPanel.MainCenterPanel mainCenterPanel = new AppointmentPanel.MainCenterPanel(mainCardPanel, cardLayout, customer);
             AppointmentPanel.CreateAptPanel createAptPanel = new AppointmentPanel.CreateAptPanel(mainCardPanel, cardLayout, customer);
 
-            TestResultsPanel testResultsPanel = new TestResultsPanel(mainCardPanel, cardLayout, customer);
+
             DiagnosesPanel.CustomerPanel diagnosesPanel = new DiagnosesPanel.CustomerPanel(mainCardPanel, cardLayout, customer);
 
             MyAccountPanel.CustomerPanel myAccountPanel = new MyAccountPanel.CustomerPanel(mainCardPanel, cardLayout, customer);
 
             mainCardPanel.add(mainCenterPanel, "Main Center");
             mainCardPanel.add(createAptPanel, "Create Apt");
-            mainCardPanel.add(testResultsPanel, "Test Results");
+
             mainCardPanel.add(diagnosesPanel, "Diagnoses");
             mainCardPanel.add(myAccountPanel, "My Account");
 
@@ -123,20 +123,20 @@ public class MainMenuPanel extends JFrame {
             leftPanel.add(mainMenuBtn);
 
 
-            JButton testResultsBtn = new JButton("Test Sonuçları");
-            testResultsBtn.setFocusable(false);
-            testResultsBtn.setPreferredSize(buttonSize);
-
-            testResultsBtn.addActionListener(e -> {
-                // Geri dönmeden önce güncelle
-                if (mainCardPanel.getComponent(0) instanceof TestResultsPanel resultsPanel) {
-                    resultsPanel.refreshContent(mainCardPanel, cardLayout);
-                }
-
-                cardLayout.show(mainCardPanel, "Test Results");
-            });
-
-            leftPanel.add(testResultsBtn);
+//            JButton testResultsBtn = new JButton("Test Sonuçları");
+//            testResultsBtn.setFocusable(false);
+//            testResultsBtn.setPreferredSize(buttonSize);
+//
+//            testResultsBtn.addActionListener(e -> {
+//                // Geri dönmeden önce güncelle
+//                if (mainCardPanel.getComponent(0) instanceof TestResultsPanel resultsPanel) {
+//                    resultsPanel.refreshContent(mainCardPanel, cardLayout);
+//                }
+//
+//                cardLayout.show(mainCardPanel, "Test Results");
+//            });
+//
+//            leftPanel.add(testResultsBtn);
 
 
             JButton illnessesBtn = new JButton("Tanılar");

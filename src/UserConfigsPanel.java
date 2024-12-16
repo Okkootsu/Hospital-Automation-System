@@ -183,7 +183,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
 
 
 
-            String[] roles = new String[] {"Doktor","Lab Asistanı","Admin"};
+            String[] roles = new String[] {"Doktor","Admin"};
 
             JComboBox<String> roleCBox = new JComboBox<>(roles);
 

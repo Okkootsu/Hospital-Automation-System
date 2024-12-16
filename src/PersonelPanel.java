@@ -8,7 +8,7 @@ public class PersonelPanel {
     JFrame frame;
     boolean admin = false;
     boolean doctor = false;
-    boolean lab = false;
+
 
     PersonelPanel () {
         frame = new JFrame();
@@ -251,7 +251,7 @@ public class PersonelPanel {
             docBtn.addActionListener(e -> {
                 admin = false;
                 doctor = true;
-                lab = false;
+
 
                 cardLayout.show(mainCardPanel, "Login");
             });
@@ -260,18 +260,18 @@ public class PersonelPanel {
             this.add(docBtn, gbc);
 
 
-            JButton labBtn = new JButton("Lab Asistanı Giriş");
-            labBtn.setFocusable(false);
-            labBtn.addActionListener(e -> {
-                admin = false;
-                doctor = false;
-                lab = true;
-
-                cardLayout.show(mainCardPanel, "Login");
-            });
-
-            gbc.gridx = 1;  gbc.gridy = 2; gbc.gridwidth = 1;
-            this.add(labBtn, gbc);
+//            JButton labBtn = new JButton("Lab Asistanı Giriş");
+//            labBtn.setFocusable(false);
+//            labBtn.addActionListener(e -> {
+//                admin = false;
+//                doctor = false;
+//                lab = true;
+//
+//                cardLayout.show(mainCardPanel, "Login");
+//            });
+//
+//            gbc.gridx = 1;  gbc.gridy = 2; gbc.gridwidth = 1;
+//            this.add(labBtn, gbc);
 
 
             JButton adminBtn = new JButton("Admin Giriş");
@@ -279,16 +279,16 @@ public class PersonelPanel {
             adminBtn.addActionListener(e -> {
                 admin = true;
                 doctor = false;
-                lab = false;
+
 
                 cardLayout.show(mainCardPanel, "Login");
             });
 
-            gbc.gridx = 1;  gbc.gridy = 3; gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 2; gbc.gridwidth = 1;
             this.add(adminBtn, gbc);
 
             //Boşluk
-            gbc.gridx = 1;  gbc.gridy = 4; gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 3; gbc.gridwidth = 1;
             this.add(new JPanel(), gbc);
 
             JButton goBackBtn = new JButton("Geri Dön");
@@ -298,11 +298,11 @@ public class PersonelPanel {
                 new LoginPanel();
             });
 
-            gbc.gridx = 1;  gbc.gridy = 5; gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 4; gbc.gridwidth = 1;
             this.add(goBackBtn, gbc);
 
             //Boşluk
-            gbc.gridx = 1;  gbc.gridy = 6; gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 5; gbc.gridwidth = 1;
             this.add(new JPanel(), gbc);
         }
     }
