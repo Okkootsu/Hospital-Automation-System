@@ -36,7 +36,7 @@ public class Doctor extends Employee {
             Statement statement = connection.createStatement();
 
             String query = "SELECT * FROM appointment " +
-                    "WHERE doctor = '"+this.username+"' ";
+                    "WHERE pid = "+this.id+" ";
 
             return statement.executeQuery(query);
 

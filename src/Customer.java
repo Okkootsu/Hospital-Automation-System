@@ -90,7 +90,7 @@ public class Customer extends BaseUser{
 
     //Randevu oluştur veri tabanına bu bilgileri yükle
     @Override
-    public void createApt(int id, String doctor, String date) {
+    public void createApt(int id, int pid, String doctor, String date) {
         try {
             MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
@@ -101,8 +101,8 @@ public class Customer extends BaseUser{
 
             Statement statement = connection.createStatement();
 
-            String query = "INSERT INTO appointment(cid, doctor, apt_date)" +
-                    "VALUES("+id+" , '"+doctor+"' , '"+date+"')";
+            String query = "INSERT INTO appointment(cid, pid, doctor, apt_date)" +
+                    "VALUES("+id+" , "+pid+" , '"+doctor+"' , '"+date+"')";
 
             statement.execute(query);
 

@@ -423,13 +423,20 @@ public class AppointmentPanel {
             saveBtn.addActionListener(e -> {
                 String doctor = Objects.requireNonNull(doctorCBox.getSelectedItem()).toString();
 
+                int startIndex = 0;
+                int stopIndex = doctor.indexOf('(');
+
+                String doctorName = doctor.substring(startIndex, stopIndex-1);
+
+                int doctorId = getDoctorId(doctorName);
+
                 String day = Objects.requireNonNull(dayCBox.getSelectedItem()).toString();
                 String month = Objects.requireNonNull(monthCBox.getSelectedItem()).toString();
                 String year = Objects.requireNonNull(yearCBox.getSelectedItem()).toString();
 
                 String date = day+"/"+month+"/"+year;
 
-                customer.createApt(customer.id, doctor, date);
+                customer.createApt(customer.id, doctorId, doctor, date);
 
                 JOptionPane.showMessageDialog(this,"Randevu oluşturuldu" ,
                         "İşlem Başarılı",JOptionPane.INFORMATION_MESSAGE);
@@ -442,6 +449,34 @@ public class AppointmentPanel {
 
             this.setLayout(new BorderLayout());
             this.add(tempPanel, BorderLayout.NORTH);
+        }
+
+        private static int getDoctorId(String fullName){
+            try {
+                MysqlDBManager mysqlDBManager = new MysqlDBManager();
+
+                Class.forName("com.mysql.cj.jdbc.Driver");
+
+                Connection connection = DriverManager.getConnection(mysqlDBManager.getSqlUrl(),
+                        mysqlDBManager.getSqlUsername(),mysqlDBManager.getSqlPassword());
+
+                Statement statement = connection.createStatement();
+
+                // Mysql'de çalışmasını istediğimiz kodu buraya yazıyoruz
+                String query = "SELECT * FROM employee " +
+                        "WHERE fullName = '"+fullName+"' ";
+
+                ResultSet resultSet = statement.executeQuery(query);
+
+                resultSet.next();
+
+                return resultSet.getInt("id");
+
+            }catch (Exception e){
+                JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                        "Bir Hata Oluştu (getInfo)",JOptionPane.ERROR_MESSAGE);
+            }
+            return -1;
         }
 
         //Tarihi uygun hale getir

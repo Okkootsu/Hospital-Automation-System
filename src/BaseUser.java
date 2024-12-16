@@ -34,7 +34,7 @@ public abstract class BaseUser {
     //Randevu metodları -> Customer, Doktor için
     public abstract ResultSet getApt();
     public abstract void delApt(int aptID);
-    public abstract void createApt(int id, String doctor, String date);
+    public abstract void createApt(int id, int pid, String doctor, String date);
 
     //Genel metod
     public abstract void update(String update, String newValue);

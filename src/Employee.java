@@ -110,7 +110,7 @@ public class Employee extends BaseUser{
 
     //Yetkisiz metod
     @Override
-    public void createApt(int id, String doctor, String date) {
+    public void createApt(int id, int pid, String doctor, String date) {
 
     }
 
