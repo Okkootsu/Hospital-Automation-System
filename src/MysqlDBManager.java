@@ -1,20 +1,34 @@
 import javax.swing.*;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Properties;
 
 // Mysql veri tabanına bağlantı sağlayan ana işlemler
 
 public class MysqlDBManager {
 
     // Bağlantı için gerekli bilgiler
-    private final String sqlUrl = "jdbc:mysql://127.0.0.1:3306/hospitaldb";
-    private final String sqlUsername = "root";
-    private final String sqlPassword = "volkancomp159357258A";
+    private  String sqlUrl;
+    private  String sqlUsername;
+    private  String sqlPassword;
     //
 
+    MysqlDBManager () {
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream("src/resources/config.properties")) {
+            properties.load(input);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Hata Kodu:"+e.getMessage(),
+                    "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
+        }
 
+        this.sqlUrl = properties.getProperty("db.url");
+        this.sqlUsername = properties.getProperty("db.user");
+        this.sqlPassword = properties.getProperty("db.password");
+    }
 
     //Bilgilerin alınması
     public String getSqlUrl(){
