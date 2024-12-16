@@ -6,9 +6,11 @@ import java.awt.event.ActionListener;
 public class PersonelPanel {
 
     JFrame frame;
+
+    // Hangi tip kullanıcı girişinin yapılacağını tut
     boolean admin = false;
     boolean doctor = false;
-
+    //
 
     PersonelPanel () {
         frame = new JFrame();
@@ -20,7 +22,7 @@ public class PersonelPanel {
         frame.setLayout(new BorderLayout());
 
         CardLayout cardLayout = new CardLayout();
-        JPanel mainCardPanel = new JPanel(cardLayout);
+        JPanel mainCardPanel = new JPanel(cardLayout); // Paneller arası ana bağlantıyı sağlar
 
         MainPanel mainPanel = new MainPanel(mainCardPanel, cardLayout);
         EmployeeChoicePanel choicePanel = new EmployeeChoicePanel(mainCardPanel, cardLayout);
@@ -35,13 +37,13 @@ public class PersonelPanel {
 
     }
 
+    // Personel için giriş yapma ekranı
     private class MainPanel extends JPanel implements ActionListener{
 
         JTextField tcTextField;
         JPasswordField passwordTextField;
         JButton goBackButton;
         JButton loginButton;
-        JButton hackBtn;
 
         MainPanel(JPanel mainCardPanel, CardLayout cardLayout){
             this.setLayout(new GridBagLayout());
@@ -110,16 +112,6 @@ public class PersonelPanel {
             this.add(showPasswordChkBox, gbc);
 
 
-            hackBtn = new JButton("Hack");
-            hackBtn.setFocusable(false);
-            hackBtn.addActionListener(this);
-
-            gbc.gridx = 3;
-            gbc.gridy = 4; //3'tü
-            gbc.gridwidth = 1;
-            this.add(hackBtn, gbc);
-
-
             loginButton = new JButton();
             loginButton.setText("Giriş Yap");
             loginButton.setFocusable(false);
@@ -127,7 +119,7 @@ public class PersonelPanel {
 
             gbc.gridx = 2;
             gbc.gridy = 4;
-            gbc.gridwidth = 1;
+            gbc.gridwidth = 2;
             this.add(loginButton, gbc);
 
 
@@ -157,14 +149,14 @@ public class PersonelPanel {
                 if(admin){
                     Employee employee = new Admin();
 
-                    char[] password = passwordTextField.getPassword();
+                    char[] password = passwordTextField.getPassword(); // şifreyi güvenli bir şekilde tut
                     employee.password = String.valueOf(password);
 
                     try {
 
                         employee.tc = Long.parseLong(tcTextField.getText());
 
-                        Login login = new Login();
+                        Login login = new Login(); // Giriş bilgilerini kontrol et
 
                         if(login.isCompleted(employee)){
 
@@ -192,7 +184,7 @@ public class PersonelPanel {
 
                         employee.tc = Long.parseLong(tcTextField.getText());
 
-                        Login login = new Login();
+                        Login login = new Login();  // Giriş bilgilerini kontrol et
 
                         if(login.isCompleted(employee)){
 
@@ -211,23 +203,11 @@ public class PersonelPanel {
                 }
 
             }
-
-            if (e.getSource() == hackBtn){
-                Admin volkan = new Admin();
-                volkan.username = "Volkan";
-                volkan.password = "123456";
-                volkan.tc = 10000000000L;
-                volkan.id = 1;
-
-                frame.dispose();
-                MainMenuPanel mainMenuPanel = MainMenuPanel.getInstance(volkan);
-            }
         }
     }
 
+    // Hangi personel için giriş yapılacağını seçtiğimiz ekran/panel
     private class EmployeeChoicePanel extends JPanel{
-
-
 
         EmployeeChoicePanel(JPanel mainCardPanel, CardLayout cardLayout) {
             this.setLayout(new GridBagLayout());
@@ -258,20 +238,6 @@ public class PersonelPanel {
 
             gbc.gridx = 1;  gbc.gridy = 1; gbc.gridwidth = 1;
             this.add(docBtn, gbc);
-
-
-//            JButton labBtn = new JButton("Lab Asistanı Giriş");
-//            labBtn.setFocusable(false);
-//            labBtn.addActionListener(e -> {
-//                admin = false;
-//                doctor = false;
-//                lab = true;
-//
-//                cardLayout.show(mainCardPanel, "Login");
-//            });
-//
-//            gbc.gridx = 1;  gbc.gridy = 2; gbc.gridwidth = 1;
-//            this.add(labBtn, gbc);
 
 
             JButton adminBtn = new JButton("Admin Giriş");

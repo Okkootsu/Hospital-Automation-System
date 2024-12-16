@@ -1,17 +1,19 @@
 import javax.swing.*;
 import java.sql.ResultSet;
 
+// Kayıt olma kontrollerinin yapıldığı class
+
 public class Register implements ILoginDal {
 
     MysqlDBManager mysqlDBManager;
 
-    Register(BaseUser user){
+    Register(BaseUser user){ // Hatalı bilgi olduğunda işlemi kabul etme
         if(isIncorrect(user)){
             JOptionPane.showMessageDialog(null,"Girilen bilgiler hatalı \n " +
                             "Lütfen tekrar deneyiniz",
                     "Bir Hata Oluştu",JOptionPane.ERROR_MESSAGE);
         }
-        else {
+        else { // Bilgiler doğruysa kullanıcı bilgilerini sisteme kaydet
             mysqlDBManager = new MysqlDBManager();
 
             mysqlDBManager.addUser(user.getTable(),user);
@@ -21,6 +23,7 @@ public class Register implements ILoginDal {
         }
     }
 
+    // Kayıt olma için kontroller
     @Override
     public boolean isIncorrect(BaseUser user) {
 

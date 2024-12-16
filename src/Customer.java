@@ -90,7 +90,7 @@ public class Customer extends BaseUser{
 
     //Randevu oluştur veri tabanına bu bilgileri yükle
     @Override
-    public void createApt(int id, String clinic, String doctor, String date) {
+    public void createApt(int id, String doctor, String date) {
         try {
             MysqlDBManager mysqlDBManager = new MysqlDBManager();
 
@@ -101,8 +101,8 @@ public class Customer extends BaseUser{
 
             Statement statement = connection.createStatement();
 
-            String query = "INSERT INTO appointment(cid, clinic, doctor, apt_date)" +
-                    "VALUES("+id+", '"+clinic+"' , '"+doctor+"' , '"+date+"')";
+            String query = "INSERT INTO appointment(cid, doctor, apt_date)" +
+                    "VALUES("+id+" , '"+doctor+"' , '"+date+"')";
 
             statement.execute(query);
 
@@ -194,6 +194,12 @@ public class Customer extends BaseUser{
     //Yetkisiz metod
     @Override
     public void addEmployee(BaseUser employee, String userRole) {
+
+    }
+
+    //Yetkisiz metod
+    @Override
+    public void addToClinic(BaseUser employee, String clinic) {
 
     }
 

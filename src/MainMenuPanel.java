@@ -10,10 +10,11 @@ public class MainMenuPanel extends JFrame {
     JPanel mainPanel;
 
     private MainMenuPanel(BaseUser user){
-        this.user = user;
+        this.user = user; //Kullanıcı bilgisini sakla
         initUI();
     }
 
+    // Her kullanıcı için bir MainMenuPanel oluştur varsa onu al
     public static MainMenuPanel getInstance(BaseUser user) {
         if (instance == null) {
             instance = new MainMenuPanel(user);
@@ -21,6 +22,7 @@ public class MainMenuPanel extends JFrame {
         return instance;
     }
 
+    //MainMenuPanel'i çalıştır
     private void initUI() {
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,6 +37,7 @@ public class MainMenuPanel extends JFrame {
         this.add(mainPanel);
     }
 
+    // Çıkış yapılınca paneli sıfırla
     public static void resetInstance() {
         instance = null;
     }
@@ -46,7 +49,7 @@ public class MainMenuPanel extends JFrame {
         JPanel mainCardPanel;
 
         MainPanel(BaseUser customer){
-            this.setLayout(new BorderLayout()); // marginler (10,10)
+            this.setLayout(new BorderLayout());
 
             //BorderLayout sınırları
 
@@ -79,6 +82,8 @@ public class MainMenuPanel extends JFrame {
 
             CardLayout cardLayout = new CardLayout();
             JPanel mainCardPanel = new JPanel(cardLayout); //sayfa geçişleri için ana bağlantıyı tutar
+
+            // Diğer sayfalara geçiş
 
             AppointmentPanel.MainCenterPanel mainCenterPanel = new AppointmentPanel.MainCenterPanel(mainCardPanel, cardLayout, customer);
             AppointmentPanel.CreateAptPanel createAptPanel = new AppointmentPanel.CreateAptPanel(mainCardPanel, cardLayout, customer);
@@ -123,22 +128,6 @@ public class MainMenuPanel extends JFrame {
             leftPanel.add(mainMenuBtn);
 
 
-//            JButton testResultsBtn = new JButton("Test Sonuçları");
-//            testResultsBtn.setFocusable(false);
-//            testResultsBtn.setPreferredSize(buttonSize);
-//
-//            testResultsBtn.addActionListener(e -> {
-//                // Geri dönmeden önce güncelle
-//                if (mainCardPanel.getComponent(0) instanceof TestResultsPanel resultsPanel) {
-//                    resultsPanel.refreshContent(mainCardPanel, cardLayout);
-//                }
-//
-//                cardLayout.show(mainCardPanel, "Test Results");
-//            });
-//
-//            leftPanel.add(testResultsBtn);
-
-
             JButton illnessesBtn = new JButton("Tanılar");
             illnessesBtn.setFocusable(false);
             illnessesBtn.setPreferredSize(buttonSize);
@@ -181,10 +170,11 @@ public class MainMenuPanel extends JFrame {
         }
     }
 
+    // Admin için ana sayfa
     public static class MainAdminPanel extends JPanel{
 
         MainAdminPanel(Admin admin){
-            this.setLayout(new BorderLayout()); // marginler (10,10)
+            this.setLayout(new BorderLayout());
 
             //BorderLayout sınırları
 
@@ -217,6 +207,8 @@ public class MainMenuPanel extends JFrame {
 
             CardLayout cardLayout = new CardLayout();
             JPanel mainCardPanel = new JPanel(cardLayout); //sayfa geçişleri için ana bağlantıyı tutar
+
+            // Diğer sayfalara geçişler
 
             UserConfigsPanel mainAdminPanel = new UserConfigsPanel(mainCardPanel, cardLayout, admin);
 
@@ -280,10 +272,11 @@ public class MainMenuPanel extends JFrame {
         }
     } // Admin kısmının sonu
 
+    // Doktor için ana sayfa
     public static class MainDoctorPanel extends JPanel{
 
         MainDoctorPanel (Doctor doctor) {
-            this.setLayout(new BorderLayout()); // marginler (10,10)
+            this.setLayout(new BorderLayout());
 
             //BorderLayout sınırları
 
@@ -316,6 +309,8 @@ public class MainMenuPanel extends JFrame {
 
             CardLayout cardLayout = new CardLayout();
             JPanel mainCardPanel = new JPanel(cardLayout); //sayfa geçişleri için ana bağlantıyı tutar
+
+            // Diğer sayfalar için geçiş
 
             AppointmentPanel.DoctorAptPanel mainDoctorPanel =
                     new AppointmentPanel.DoctorAptPanel(mainCardPanel, cardLayout, doctor);

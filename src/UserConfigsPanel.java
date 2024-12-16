@@ -5,12 +5,14 @@ import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.util.Objects;
 
+// Admin için kullanıcı ekleme ve silme panellerini içeren class
+
 public class UserConfigsPanel extends JPanel implements IPanel{
 
     private Admin admin;
 
     UserConfigsPanel(JPanel mainCardPanel, CardLayout cardLayout, Admin admin) {
-        this.admin = admin;
+        this.admin = admin; // Kullanıcı bilgisini sakla
         initializePanel(mainCardPanel, cardLayout);
     }
 
@@ -22,6 +24,8 @@ public class UserConfigsPanel extends JPanel implements IPanel{
         refreshContent(mainCardPanel, cardLayout);
     }
 
+    // Hangi işlemin yapılacağını seçtiğimiz panel
+    // Sayfayı güncelle
     @Override
     public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
         this.removeAll();
@@ -93,6 +97,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
         this.repaint();
     }
 
+    // Kullanıcı ekleme sayfası
     private class UserAddPanel extends JPanel implements IPanel{
 
         UserAddPanel(JPanel mainCardPanel, CardLayout cardLayout) {
@@ -107,6 +112,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
             refreshContent(mainCardPanel, cardLayout);
         }
 
+        // Sayfayı güncelle
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
             this.removeAll();
@@ -191,6 +197,22 @@ public class UserConfigsPanel extends JPanel implements IPanel{
             tempPanel.add(roleCBox, gbc);
 
 
+
+            JLabel clinicLabel = new JLabel("Klinik :");
+            clinicLabel.setFont(font);
+
+            gbc.gridx = 1;  gbc.gridy = 5; gbc.gridwidth = 1;
+            tempPanel.add(clinicLabel, gbc);
+
+
+            String[] clinics = new String[] {"Yok/Admin","Nöroloji","Dahiliye","Ortopedi"};
+
+            JComboBox<String> clinicCBox = new JComboBox<>(clinics);
+
+            gbc.gridx = 2;  gbc.gridy = 5; gbc.gridwidth = 1;
+            tempPanel.add(clinicCBox, gbc);
+
+
             JButton goBackBtn = new JButton("Geri Dön");
             goBackBtn.setFocusable(false);
             goBackBtn.addActionListener(e -> {
@@ -202,7 +224,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
                 cardLayout.show(mainCardPanel, "Admin Center");
             });
 
-            gbc.gridx = 1;  gbc.gridy = 5; gbc.gridwidth = 1;
+            gbc.gridx = 1;  gbc.gridy = 6; gbc.gridwidth = 1;
             tempPanel.add(goBackBtn, gbc);
 
 
@@ -214,6 +236,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
                     String tc = Objects.requireNonNull(tcTxtField.getText());
                     String pass = Objects.requireNonNull(passTxtField.getText());
                     String role = Objects.requireNonNull(roleCBox.getSelectedItem()).toString();
+                    String clinic = Objects.requireNonNull(clinicCBox.getSelectedItem()).toString();
 
                     Employee employee = new Employee();
 
@@ -221,16 +244,42 @@ public class UserConfigsPanel extends JPanel implements IPanel{
                     employee.password = pass;
                     employee.tc = Long.parseLong(tc);
 
+                    if (String.valueOf(Math.abs(employee.tc)).length() == 11){
 
-                    admin.addEmployee(employee, role);
+                        admin.addEmployee(employee, role);
 
-                    JOptionPane.showMessageDialog(this,"Kullanıcı sisteme eklendi" ,
-                            "İşlem Başarılı",JOptionPane.INFORMATION_MESSAGE);
+                        if (role.equals("Doktor")) {
+                            if ( !(clinic.equals("Yok/Admin")) ){
+                                admin.addToClinic(employee, clinic);
 
-                    // Kullanıcı silme panelini güncelle
-                    if (mainCardPanel.getComponent(1) instanceof UserDelPanel userDelPanel) {
-                        userDelPanel.refreshContent(mainCardPanel, cardLayout);
+                                JOptionPane.showMessageDialog(this,"Kullanıcı sisteme eklendi" ,
+                                        "İşlem Başarılı",JOptionPane.INFORMATION_MESSAGE);
+
+                                // Kullanıcı silme panelini güncelle
+                                if (mainCardPanel.getComponent(1) instanceof UserDelPanel userDelPanel) {
+                                    userDelPanel.refreshContent(mainCardPanel, cardLayout);
+                                }
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(this,"Girilen bilgiler tutarlı değil" ,
+                                        "İşlem Başarısız",JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+
+                            JOptionPane.showMessageDialog(this,"Kullanıcı sisteme eklendi" ,
+                                    "İşlem Başarılı",JOptionPane.INFORMATION_MESSAGE);
+
+                            // Kullanıcı silme panelini güncelle
+                            if (mainCardPanel.getComponent(1) instanceof UserDelPanel userDelPanel) {
+                                userDelPanel.refreshContent(mainCardPanel, cardLayout);
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this,"Girilen bilgiler tutarlı değil" ,
+                                "İşlem Başarısız",JOptionPane.ERROR_MESSAGE);
                     }
+
+
 
                 }catch (Exception exception){
                     JOptionPane.showMessageDialog(null,"Hata kodu: "+exception.getMessage() ,
@@ -239,7 +288,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
 
             });
 
-            gbc.gridx = 2;  gbc.gridy = 5; gbc.gridwidth = 1;
+            gbc.gridx = 2;  gbc.gridy = 6; gbc.gridwidth = 1;
             tempPanel.add(saveBtn, gbc);
 
 
@@ -250,6 +299,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
         }
     }
 
+    // Kullanıcı silme ekranı
     private class UserDelPanel extends JPanel implements IPanel {
 
         UserDelPanel(JPanel mainCardPanel, CardLayout cardLayout) {
@@ -264,6 +314,7 @@ public class UserConfigsPanel extends JPanel implements IPanel{
             refreshContent(mainCardPanel, cardLayout);
         }
 
+        // Sayfayı güncelle
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
             this.removeAll();
@@ -307,12 +358,14 @@ public class UserConfigsPanel extends JPanel implements IPanel{
             gbc.gridx = 0;
             gbc.gridy = 0;
 
-            try {
-                ResultSet resultSet = admin.getUsers();
+            try { // ResultSet hatalarına karşı try-catch bloğu kullanıldı
+                ResultSet resultSet = admin.getUsers(); // Kullanıcılar alındı
 
-                while (resultSet.next()) {
+                while (resultSet.next()) { // Kullanıcı bilgileri alındı
 
                     int userID = resultSet.getInt("id");
+                    String name = resultSet.getString("fullName");
+                    String role = resultSet.getString("role");
 
                     JPanel panel = new JPanel();
                     panel.setLayout(new GridLayout(1,2));
@@ -338,19 +391,19 @@ public class UserConfigsPanel extends JPanel implements IPanel{
 
                     panel.addMouseListener(new MouseAdapter() {
                         @Override
-                        public void mouseEntered(MouseEvent e) {
+                        public void mouseEntered(MouseEvent e) { // Fare üzerine getirilince arka planını değiştir
                             panel.setBackground(new Color(255, 232, 147));
                             panel.setOpaque(true);
                         }
 
                         @Override
-                        public void mouseExited(MouseEvent e) {
+                        public void mouseExited(MouseEvent e) { // Fare üzerine getirilince arka planını değiştir
                             panel.setBackground(new Color(245, 240, 205));
                             panel.setOpaque(true);
                         }
 
                         @Override
-                        public void mouseClicked(MouseEvent e) {
+                        public void mouseClicked(MouseEvent e) { // Üzerine tıklayınca bu kullanıcıyı sil
 
                             int choice = JOptionPane.showOptionDialog(null,"Bu kullanıcıyı " +
                                             "silmek isrediğinize emin misiniz?",
@@ -359,6 +412,12 @@ public class UserConfigsPanel extends JPanel implements IPanel{
 
                             if(choice == 0){
                                 admin.delUser(userID);
+
+                                if (role.equals("Doktor")) {
+                                    admin.delUserFromClinics(name);
+                                }
+
+
                                 empList.remove(panel);
 
                                 empList.revalidate();

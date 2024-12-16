@@ -32,10 +32,9 @@ public class HastaPanel {
         JButton registerButton;
         JButton loginButton;
         JButton goBackLoginButton;
-        JTextField nameTextField;
         JTextField tcTextField;
         JPasswordField passwordTextField;
-        JButton hackButton; //otomatik giriş yapmak için
+
 
         MainPanel(){
             this.setLayout(new GridBagLayout());
@@ -52,7 +51,7 @@ public class HastaPanel {
             gbc.gridy = 0;
             this.add(new JPanel(), gbc);
 
-            gbc.gridx = 5; //4 olması lazım
+            gbc.gridx = 4; //4 olması lazım
             this.add(new JPanel(), gbc);
 
 
@@ -65,7 +64,7 @@ public class HastaPanel {
 
             tcTextField = new JTextField();
                                                     //2 olmalı
-            gbc.gridx = 2;  gbc.gridy = 1;  gbc.gridwidth = 3;
+            gbc.gridx = 2;  gbc.gridy = 1;  gbc.gridwidth = 2;
             this.add(tcTextField, gbc);
 
 
@@ -79,7 +78,7 @@ public class HastaPanel {
             passwordTextField = new JPasswordField();
             passwordTextField.setEchoChar('*');
                                                     //2 olmalı
-            gbc.gridx = 2;  gbc.gridy = 2;  gbc.gridwidth = 3;
+            gbc.gridx = 2;  gbc.gridy = 2;  gbc.gridwidth = 2;
             this.add(passwordTextField, gbc);
 
             //Şifreyi Göster
@@ -94,20 +93,10 @@ public class HastaPanel {
                 }
             });
 
-            gbc.gridx = 2;  gbc.gridy = 3;  gbc.gridwidth = 3;
+            gbc.gridx = 2;  gbc.gridy = 3;  gbc.gridwidth = 2;
             this.add(showPasswordChkBox, gbc);
 
-            //Fazlalık
-            hackButton = new JButton();
-            hackButton.setText("Hack");
-            hackButton.setFocusable(false);
-            hackButton.addActionListener(this);
 
-            gbc.gridx = 4;
-            gbc.gridy = 4; //3'tü
-            gbc.gridwidth = 1;
-            this.add(hackButton, gbc);
-            //
 
             loginButton = new JButton();
             loginButton.setText("Giriş Yap");
@@ -188,17 +177,6 @@ public class HastaPanel {
                             "Uyarı",JOptionPane.ERROR_MESSAGE);
 
                 }
-            }
-
-            if(e.getSource() == hackButton){
-                Customer volkan = new Customer();
-                volkan.username = "volkan mutlu";
-                volkan.password = "123456";
-                volkan.tc = 12345678910L;
-                volkan.id = 7;
-
-                frame.dispose();
-                MainMenuPanel mainMenuPanel = MainMenuPanel.getInstance(volkan);
             }
         }
     }

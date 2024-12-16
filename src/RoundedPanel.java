@@ -1,12 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 
+// Yumuşak kenarlı panel yapmak için class
+
 public class RoundedPanel extends JPanel {
     private int arcWidth;  //yatayda yuvarlaklık derecesi
     private int arcHeight; //dikeyde yuvarlaklık derecesi
     private Color borderColor; //Kenar rengi
     private int borderThickness; //Kenar kalınlığı
 
+    //Kenar bilgilerini gir
     public RoundedPanel(int arcWidth, int arcHeight, Color borderColor, int borderThickness) {
         this.arcWidth = arcWidth;
         this.arcHeight = arcHeight;
@@ -15,6 +18,7 @@ public class RoundedPanel extends JPanel {
         setOpaque(false);
     }
 
+    // Kenarı istenen şekle getir
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

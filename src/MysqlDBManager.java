@@ -4,12 +4,19 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+// Mysql veri tabanına bağlantı sağlayan ana işlemler
+
 public class MysqlDBManager {
 
+    // Bağlantı için gerekli bilgiler
     private final String sqlUrl = "jdbc:mysql://127.0.0.1:3306/hospitaldb";
     private final String sqlUsername = "root";
     private final String sqlPassword = "volkancomp159357258A";
+    //
 
+
+
+    //Bilgilerin alınması
     public String getSqlUrl(){
         return sqlUrl;
     }
@@ -21,8 +28,9 @@ public class MysqlDBManager {
     public String getSqlPassword() {
         return sqlPassword;
     }
+    //
 
-
+    // Kullanıcı ekleme metodu, table hangi tabloya ekleneceğini belirler
     public void addUser(String table, BaseUser user) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -31,6 +39,7 @@ public class MysqlDBManager {
 
             Statement statement = connection.createStatement();
 
+            // Mysql'de çalışmasını istediğimiz kodu buraya yazıyoruz
             String query = "INSERT INTO "+table+"(fullName, tc, password)" +
                     "VALUES('"+user.username+"', "+user.tc+" , '"+user.password+"')";
 
@@ -42,7 +51,7 @@ public class MysqlDBManager {
         }
     }
 
-
+    // Kullanıcı bilgilerini güncelle
     public void updateInfo(String table, BaseUser user, String update, String newValue) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -51,6 +60,7 @@ public class MysqlDBManager {
 
             Statement statement = connection.createStatement();
 
+            // Mysql'de çalışmasını istediğimiz kodu buraya yazıyoruz
             String query = "UPDATE "+table+" " +
                             "SET "+update+" = '"+newValue+"' " +
                             "WHERE id = " + user.id;
@@ -64,7 +74,7 @@ public class MysqlDBManager {
         }
     }
 
-
+    // Kullanıcı sil
     public void deleteUser(String table, int userID) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -73,6 +83,7 @@ public class MysqlDBManager {
 
             Statement statement = connection.createStatement();
 
+            // Mysql'de çalışmasını istediğimiz kodu buraya yazıyoruz
             String query = "DELETE FROM "+table+" " +
                     "WHERE id = "+userID;
 
@@ -84,7 +95,7 @@ public class MysqlDBManager {
         }
     }
 
-
+    // Kullanıcı bilgilerini al
     public ResultSet getInfo(String table, BaseUser user) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -93,6 +104,7 @@ public class MysqlDBManager {
 
             Statement statement = connection.createStatement();
 
+            // Mysql'de çalışmasını istediğimiz kodu buraya yazıyoruz
             String query = "SELECT * FROM "+table+" " +
                     "WHERE tc = "+user.tc;
 
@@ -105,6 +117,7 @@ public class MysqlDBManager {
         return null;
     }
 
+    // Kullanıcının ismini al
     public String getUsername(String table, int id) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -113,6 +126,7 @@ public class MysqlDBManager {
 
             Statement statement = connection.createStatement();
 
+            // Mysql'de çalışmasını istediğimiz kodu buraya yazıyoruz
             String query = "SELECT fullName FROM "+table+" " +
                     "WHERE id = "+id;
 
@@ -127,7 +141,7 @@ public class MysqlDBManager {
                     "Bir Hata Oluştu (getInfo)",JOptionPane.ERROR_MESSAGE);
         }
 
-        return "";
+        return ""; // işlem başarısız olursa boş string döndür
     }
 
 }

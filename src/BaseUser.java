@@ -24,6 +24,8 @@ public abstract class BaseUser {
     //Admin metodları
     public abstract ResultSet getUsers();
     public abstract void addEmployee(BaseUser employee, String userRole);
+    public abstract void addToClinic(BaseUser employee, String clinic);
+
 
     //Teşhis metodları -> Customer, Doktor için
     public abstract ResultSet getDiagnoses();
@@ -32,7 +34,7 @@ public abstract class BaseUser {
     //Randevu metodları -> Customer, Doktor için
     public abstract ResultSet getApt();
     public abstract void delApt(int aptID);
-    public abstract void createApt(int id, String clinic, String doctor, String date);
+    public abstract void createApt(int id, String doctor, String date);
 
     //Genel metod
     public abstract void update(String update, String newValue);

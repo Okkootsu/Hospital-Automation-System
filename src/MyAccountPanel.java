@@ -5,11 +5,12 @@ import java.awt.event.ActionListener;
 
 public class MyAccountPanel {
 
+    // Hastalar girişi için hesap paneli
     public static class CustomerPanel extends JPanel implements IPanel, ActionListener {
         private final BaseUser customer;
 
         CustomerPanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser customer){
-            this.customer = customer;
+            this.customer = customer; // Kullanıcı bilgisini sakla
             initializePanel(mainCardPanel, cardLayout);
         }
 
@@ -23,8 +24,9 @@ public class MyAccountPanel {
         JButton showPasswordBtn;
         JLabel password;
         StringBuilder censoredPassword;
-        int count = 0;
+        int count = 0; // Şifreyi gösterme butonu için sayaç -> tek sayılarda göster, çift sayılarda gösterme
 
+        // Sayfayı güncelle
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
             this.removeAll();
@@ -154,26 +156,11 @@ public class MyAccountPanel {
             accountPanel.add(buttonPanel, gbc);
 
 
-//            JLabel idLabel = new JLabel("ID : ");
-//            idLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
-//
-//            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
-//            accountPanel.add(idLabel, gbc);
-
-
-
-//            JLabel id = new JLabel();
-//            id.setText(String.valueOf(customer.id));
-//            id.setFont(new Font("Times New Roman",Font.PLAIN,30));
-//
-//            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 2;
-//            accountPanel.add(id, gbc);
-
-
             JButton delAccountBtn = new JButton("Hesabı Sil");
             delAccountBtn.setFocusable(false);
             delAccountBtn.addActionListener(e -> {
-                int choice = JOptionPane.showOptionDialog(this,"Hesabınızı KALICI olarak silmek istediğinize emin misiniz?",
+                int choice = JOptionPane.showOptionDialog(this,"Hesabınızı KALICI olarak " +
+                                "silmek istediğinize emin misiniz?",
                         "Uyarı!",JOptionPane.YES_NO_OPTION,
                         JOptionPane.INFORMATION_MESSAGE,null,null,0);
 
@@ -210,10 +197,6 @@ public class MyAccountPanel {
                     customer.update("password",newPass);
                     customer.password = newPass;
 
-//                    // Hesap panelini güncelle
-//                    if (mainCardPanel.getComponent(4) instanceof CustomerPanel myAccountPanel) {
-//                        myAccountPanel.refreshContent(mainCardPanel, cardLayout);
-//                    }
 
                     this.refreshContent(mainCardPanel, cardLayout); // Güncel içeriği yükle
                 }
@@ -256,7 +239,7 @@ public class MyAccountPanel {
 
                 count++;
 
-                if(count % 2 == 0){
+                if(count % 2 == 0){ // Şifreyi gizle
                     password.setText(censoredPassword.toString());
 
                     password.revalidate();
@@ -268,7 +251,7 @@ public class MyAccountPanel {
                     showPasswordBtn.repaint();
                 }
 
-                else{
+                else{ // Şifreyi göster
                     password.setText(customer.password);
 
                     password.revalidate();
@@ -283,12 +266,13 @@ public class MyAccountPanel {
         }
     }
 
+    // Çalışanlar için hesap paneli
     public static class EmployeePanel extends JPanel implements IPanel, ActionListener{
 
         private final BaseUser employee;
 
         EmployeePanel(JPanel mainCardPanel, CardLayout cardLayout, BaseUser employee){
-            this.employee = employee;
+            this.employee = employee; // Kullanıcı bilgisini sakla
             initializePanel(mainCardPanel, cardLayout);
         }
 
@@ -304,6 +288,7 @@ public class MyAccountPanel {
         StringBuilder censoredPassword;
         int count = 0;
 
+        // Sayfayı güncelle
         @Override
         public void refreshContent(JPanel mainCardPanel, CardLayout cardLayout) {
             this.removeAll();
@@ -433,23 +418,6 @@ public class MyAccountPanel {
             accountPanel.add(buttonPanel, gbc);
 
 
-
-//            JLabel idLabel = new JLabel("ID : ");
-//            idLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
-//
-//            gbc.gridx = 0;  gbc.gridy = 4;  gbc.gridwidth = 1;
-//            accountPanel.add(idLabel, gbc);
-//
-//
-//
-//            JLabel id = new JLabel();
-//            id.setText(String.valueOf(employee.id));
-//            id.setFont(new Font("Times New Roman",Font.PLAIN,30));
-//
-//            gbc.gridx = 1;  gbc.gridy = 4;  gbc.gridwidth = 2;
-//            accountPanel.add(id, gbc);
-
-
             JLabel roleLabel = new JLabel("Meslek : ");
             roleLabel.setFont(new Font("Times New Roman",Font.PLAIN,30));
 
@@ -549,7 +517,7 @@ public class MyAccountPanel {
 
                 count++;
 
-                if(count % 2 == 0){
+                if(count % 2 == 0){ // Şifreyi gizle
                     password.setText(censoredPassword.toString());
 
                     password.revalidate();
@@ -561,7 +529,7 @@ public class MyAccountPanel {
                     showPasswordBtn.repaint();
                 }
 
-                else{
+                else{ // Şifreyi göster
                     password.setText(employee.password);
 
                     password.revalidate();

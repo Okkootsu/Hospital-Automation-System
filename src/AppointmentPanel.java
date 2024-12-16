@@ -199,9 +199,14 @@ public class AppointmentPanel {
 
             try {
                 while (resultSet.next()) {  //Her bir randevu arasında geziniyoruz ve gerekli bilgileri çekiyoruz
-                    clinic = resultSet.getString("clinic");
-                    doctor = resultSet.getString("doctor");
+
+                    int startIndex = resultSet.getString("doctor").indexOf('(');
+                    int endIndex = resultSet.getString("doctor").indexOf(')');
+
+                    doctor = resultSet.getString("doctor").substring(0,startIndex);
                     date = resultSet.getString("apt_date");
+
+                    clinic = resultSet.getString("doctor").substring(startIndex+1,endIndex);
 
                     int aptID = resultSet.getInt("apt_id");
 
@@ -341,32 +346,18 @@ public class AppointmentPanel {
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.gridwidth = 1;
-            tempPanel.add(new JLabel("Klinik :"), gbc);
-
-            String[] klinik = new String[] {"Dahiliye","Kardiyoloji","Nöroloji","Ortopedi","Nefroloji"};
-
-            JComboBox<String> clinicCBox = new JComboBox<>(klinik);
-
-            gbc.gridx = 1;
-            gbc.gridy = 0;
-            gbc.gridwidth = 1;
-            tempPanel.add(clinicCBox, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            gbc.gridwidth = 1;
             tempPanel.add(new JLabel("Doktor :"), gbc);
 
             //Doktor seçme Combobox'ı
             JComboBox<String> doctorCBox = new JComboBox<>(doctors);
 
             gbc.gridx = 1;
-            gbc.gridy = 1;
+            gbc.gridy = 0;
             gbc.gridwidth = 1;
             tempPanel.add(doctorCBox, gbc);
 
             gbc.gridx = 0;
-            gbc.gridy = 2;
+            gbc.gridy = 1;
             gbc.gridwidth = 1;
             tempPanel.add(new JLabel("Tarih :"), gbc);
 
@@ -375,7 +366,7 @@ public class AppointmentPanel {
             dateTempPanel.setOpaque(false);
 
             gbc.gridx = 1;
-            gbc.gridy = 2;
+            gbc.gridy = 1;
             gbc.gridwidth = 1;
             tempPanel.add(dateTempPanel, gbc);
 
@@ -422,7 +413,7 @@ public class AppointmentPanel {
             });
 
             gbc.gridx = 0;
-            gbc.gridy = 3;
+            gbc.gridy = 2;
             gbc.gridwidth = 1;
             tempPanel.add(goBackBtn, gbc);
 
@@ -430,7 +421,6 @@ public class AppointmentPanel {
             saveBtn = new JButton("Kaydet");
             saveBtn.setFocusable(false);
             saveBtn.addActionListener(e -> {
-                String clinic = Objects.requireNonNull(clinicCBox.getSelectedItem()).toString();
                 String doctor = Objects.requireNonNull(doctorCBox.getSelectedItem()).toString();
 
                 String day = Objects.requireNonNull(dayCBox.getSelectedItem()).toString();
@@ -439,14 +429,14 @@ public class AppointmentPanel {
 
                 String date = day+"/"+month+"/"+year;
 
-                customer.createApt(customer.id, clinic, doctor, date);
+                customer.createApt(customer.id, doctor, date);
 
                 JOptionPane.showMessageDialog(this,"Randevu oluşturuldu" ,
                         "İşlem Başarılı",JOptionPane.INFORMATION_MESSAGE);
             });
 
             gbc.gridx = 1;
-            gbc.gridy = 3;
+            gbc.gridy = 2;
             gbc.gridwidth = 1;
             tempPanel.add(saveBtn, gbc);
 
@@ -483,8 +473,8 @@ public class AppointmentPanel {
 
                 Statement statement = connection.createStatement();
 
-                String query = "SELECT fullName FROM employee " +
-                        "WHERE role = 'Doktor' ";
+                String query = "SELECT * FROM clinics " ;
+
 
                 ResultSet resultSet = statement.executeQuery(query);
 
@@ -492,7 +482,8 @@ public class AppointmentPanel {
 
                 while (resultSet.next()) {
 
-                    doctorNames.add(resultSet.getString("fullName"));
+                    doctorNames.add(resultSet.getString("fullName") + " " +
+                          "(" + resultSet.getString("clinic") + ")" );
 
                 }
 
